@@ -91,6 +91,7 @@
                 </div>
                 <div class="card-body">
                     <form action="<?= base_url('admin/pesanan/update-status/' . $pesanan['id']) ?>" method="post">
+                        <?= csrf_field(); ?>
                         <div class="mb-3">
                             <label for="status" class="form-label">Status Pesanan</label>
                             <select class="form-control" id="status" name="status">

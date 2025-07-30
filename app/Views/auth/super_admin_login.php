@@ -74,6 +74,7 @@
             <?php endif; ?>
             
             <form action="<?= base_url('b0/super-admin') ?>" method="post">
+                <?= csrf_field(); ?>
                 <div class="mb-3">
                     <label for="username" class="form-label">
                         <i class="fas fa-user me-2"></i>Username
