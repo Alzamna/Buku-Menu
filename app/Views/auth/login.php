@@ -102,7 +102,6 @@
                             <small class="text-muted">
                                 <i class="fas fa-info-circle me-1"></i>
                                 Demo Account:<br>
-                                Super Admin: superadmin / superadmin123<br>
                                 Admin Restoran: admin / admin123
                             </small>
                         </div>

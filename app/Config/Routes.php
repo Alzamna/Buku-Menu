@@ -8,7 +8,10 @@ use CodeIgniter\Router\RouteCollection;
 // Authentication Routes
 $routes->get('/', 'Auth::index');
 $routes->get('auth', 'Auth::index');
+$routes->get('b0/super-admin', 'Auth::superAdminLogin');
+$routes->get('dashboard', 'Auth::index'); // Redirect to login if accessing dashboard directly
 $routes->post('auth/login', 'Auth::login');
+$routes->post('b0/super-admin', 'Auth::superAdminLoginProcess');
 $routes->get('auth/logout', 'Auth::logout');
 
 // Super Admin Routes
