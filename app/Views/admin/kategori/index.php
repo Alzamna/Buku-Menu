@@ -16,7 +16,7 @@
     <div class="card shadow">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">
-                <i class="fas fa-list me-2"></i>Daftar Kategori Menu
+                <i class="fas fa-list me-2"></i>Daftar Kategori
             </h6>
         </div>
         <div class="card-body">
@@ -44,7 +44,7 @@
                                         <strong><?= esc($kategori['nama']) ?></strong>
                                     </td>
                                     <td>
-                                        <span class="badge bg-success"><?= $kategori['jumlah_menu'] ?? 0 ?></span>
+                                        <span class="badge bg-info"><?= $kategori['jumlah_menu'] ?? 0 ?></span>
                                     </td>
                                     <td><?= date('d/m/Y H:i', strtotime($kategori['created_at'])) ?></td>
                                     <td>
