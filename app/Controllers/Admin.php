@@ -232,7 +232,7 @@ class Admin extends BaseController
             return redirect()->to('/admin/menu')->with('error', 'Menu tidak ditemukan!');
         }
 
-        if ($this->request->getMethod() === 'post') {
+        if ($this->request->getMethod() == 'POST') {
             $rules = [
                 'nama' => 'required|min_length[3]|max_length[255]',
                 'harga' => 'required|numeric|greater_than[0]',

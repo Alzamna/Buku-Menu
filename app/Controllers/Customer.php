@@ -58,7 +58,7 @@ class Customer extends BaseController
 
     public function addToCart()
     {
-        if ($this->request->getMethod() !== 'post') {
+        if ($this->request->getMethod() !== 'POST') {
             return redirect()->back();
         }
 
@@ -179,7 +179,7 @@ class Customer extends BaseController
             return redirect()->to('/')->with('error', 'Keranjang kosong!');
         }
 
-        if ($this->request->getMethod() === 'post') {
+        if ($this->request->getMethod() == 'POST') {
             $metode = $this->request->getPost('metode');
             $restoranId = $this->request->getPost('restoran_id');
 

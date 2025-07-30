@@ -14,7 +14,7 @@ class SuperAdmin extends BaseController
     {
         $this->restoranModel = new RestoranModel();
         $this->userModel = new UserModel();
-        
+
         // Check if user is super admin
         if (session()->get('role') !== 'super_admin') {
             return redirect()->to('/auth')->with('error', 'Akses ditolak!');
@@ -45,7 +45,7 @@ class SuperAdmin extends BaseController
 
     public function restoranCreate()
     {
-        if ($this->request->getMethod() === 'post') {
+        if ($this->request->getMethod() == 'POST') {
             $rules = [
                 'nama' => 'required|min_length[3]|max_length[255]',
                 'alamat' => 'required|min_length[10]',
@@ -81,12 +81,12 @@ class SuperAdmin extends BaseController
     public function restoranEdit($id)
     {
         $restoran = $this->restoranModel->find($id);
-        
+
         if (!$restoran) {
             return redirect()->to('/super-admin/restoran')->with('error', 'Restoran tidak ditemukan!');
         }
 
-        if ($this->request->getMethod() === 'post') {
+        if ($this->request->getMethod() == 'POST') {
             $rules = [
                 'nama' => 'required|min_length[3]|max_length[255]',
                 'alamat' => 'required|min_length[10]',
@@ -143,7 +143,7 @@ class SuperAdmin extends BaseController
 
     public function adminCreate()
     {
-        if ($this->request->getMethod() === 'post') {
+        if ($this->request->getMethod() == 'POST') {
             $rules = [
                 'username' => 'required|min_length[3]|max_length[100]|is_unique[users.username]',
                 'password' => 'required|min_length[6]',
@@ -181,7 +181,7 @@ class SuperAdmin extends BaseController
     public function adminDelete($id)
     {
         $admin = $this->userModel->find($id);
-        
+
         if ($admin && $admin['role'] === 'admin_restoran') {
             if ($this->userModel->delete($id)) {
                 session()->setFlashdata('success', 'Admin berhasil dihapus!');
@@ -194,4 +194,4 @@ class SuperAdmin extends BaseController
 
         return redirect()->to('/super-admin/admin');
     }
-} 
+}
