@@ -21,7 +21,8 @@
         </div>
         <div class="card-body">
             <form action="<?= base_url('admin/menu/edit/' . $menu['id']) ?>" method="post" enctype="multipart/form-data">
-                <div class="row">
+                <?= csrf_field(); ?>
+            <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="nama" class="form-label">

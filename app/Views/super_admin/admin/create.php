@@ -21,6 +21,7 @@
         </div>
         <div class="card-body">
             <form action="<?= base_url('super-admin/admin/create') ?>" method="post">
+                    <?= csrf_field(); ?>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">

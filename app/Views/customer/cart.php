@@ -104,6 +104,7 @@
                     </div>
                 <?php else: ?>
                     <form action="<?= base_url('customer/update-cart') ?>" method="post">
+                            <?= csrf_field(); ?>
                         <?php foreach ($cart as $index => $item): ?>
                             <div class="cart-item p-3">
                                 <div class="row align-items-center">

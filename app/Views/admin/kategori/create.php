@@ -21,18 +21,19 @@
         </div>
         <div class="card-body">
             <form action="<?= base_url('admin/kategori/create') ?>" method="post">
+                <?= csrf_field(); ?>
                 <div class="mb-3">
                     <label for="nama" class="form-label">
                         <i class="fas fa-tag me-2"></i>Nama Kategori <span class="text-danger">*</span>
                     </label>
-                    <input type="text" class="form-control <?= session('errors.nama') ? 'is-invalid' : '' ?>" 
-                           id="nama" name="nama" value="<?= old('nama') ?>" required>
+                    <input type="text" class="form-control <?= session('errors.nama') ? 'is-invalid' : '' ?>" id="nama"
+                        name="nama" value="<?= old('nama') ?>" required>
                     <?php if (session('errors.nama')): ?>
                         <div class="invalid-feedback"><?= session('errors.nama') ?></div>
                     <?php endif; ?>
                     <div class="form-text">Contoh: Makanan, Minuman, Snack, dll</div>
                 </div>
-                
+
                 <div class="d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save me-2"></i>Simpan Kategori
@@ -42,4 +43,4 @@
         </div>
     </div>
 </div>
-<?= $this->endSection() ?> 
+<?= $this->endSection() ?>

@@ -197,6 +197,7 @@
                                                 </div>
                                                 
                                                 <form action="<?= base_url('customer/add-to-cart') ?>" method="post">
+                                                        <?= csrf_field(); ?>
                                                     <input type="hidden" name="menu_id" value="<?= $menu['id'] ?>">
                                                     
                                                     <div class="mb-3">
