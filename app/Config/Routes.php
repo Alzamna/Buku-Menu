@@ -30,7 +30,9 @@ $routes->group('super-admin', ['filter' => 'auth'], function($routes) {
 });
 
 // Admin Restoran Routes
-$routes->group('admin', ['filter' => 'auth'], function($routes) {
+$routes->group('admin', ['filter' => 'admin_restoran'], function($routes) {
+    // routes...
+
     $routes->get('dashboard', 'Admin::dashboard');
     $routes->get('kategori', 'Admin::kategori');
     $routes->get('kategori/create', 'Admin::kategoriCreate');

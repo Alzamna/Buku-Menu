@@ -25,6 +25,7 @@ class Admin extends BaseController
         if (session()->get('role') !== 'admin_restoran') {
             return redirect()->to('/auth')->with('error', 'Akses ditolak!');
         }
+
     }
 
     public function dashboard()
@@ -65,7 +66,7 @@ class Admin extends BaseController
     {
         $restoranId = session()->get('restoran_id');
 
-        if ($this->request->getMethod() === 'post') {
+        if ($this->request->getMethod() == 'POST') {
             $rules = [
                 'nama' => 'required|min_length[2]|max_length[100]',
             ];
@@ -106,7 +107,7 @@ class Admin extends BaseController
             return redirect()->to('/admin/kategori')->with('error', 'Kategori tidak ditemukan!');
         }
 
-        if ($this->request->getMethod() === 'post') {
+        if ($this->request->getMethod() == 'POST') {
             $rules = [
                 'nama' => 'required|min_length[2]|max_length[100]',
             ];
@@ -173,7 +174,7 @@ class Admin extends BaseController
     {
         $restoranId = session()->get('restoran_id');
 
-        if ($this->request->getMethod() === 'post') {
+        if ($this->request->getMethod() == 'POST') {
             $rules = [
                 'nama' => 'required|min_length[3]|max_length[255]',
                 'harga' => 'required|numeric|greater_than[0]',
