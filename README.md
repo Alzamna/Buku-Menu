@@ -1,68 +1,231 @@
-# CodeIgniter 4 Application Starter
+# Sistem Menu Restoran - CodeIgniter 4
 
-## What is CodeIgniter?
+Sistem menu restoran digital yang memungkinkan pelanggan memesan makanan melalui QR Code atau link langsung. Dibangun dengan CodeIgniter 4, Bootstrap 5, dan MySQL.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+## 🚀 Fitur Utama
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+### Super Admin
+- ✅ Mengelola semua restoran (CRUD)
+- ✅ Membuat akun admin restoran
+- ✅ Dashboard dengan statistik
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+### Admin Restoran
+- ✅ Mengelola kategori menu
+- ✅ Mengelola menu produk (nama, harga, deskripsi, gambar, stok)
+- ✅ Generate QR Code untuk menu pelanggan
+- ✅ Mengelola pesanan pelanggan
+- ✅ Dashboard dengan statistik restoran
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+### Pelanggan (Public Access)
+- ✅ Melihat menu restoran via QR Code/link
+- ✅ Memilih produk dengan jumlah dan catatan
+- ✅ Keranjang belanja
+- ✅ Checkout dengan pilihan dine in/take away
+- ✅ Detail pesanan
 
-## Installation & updates
+## 🛠️ Teknologi
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+- **Framework**: CodeIgniter 4
+- **Database**: MySQL
+- **Frontend**: Bootstrap 5, Font Awesome
+- **QR Code**: Endroid/QrCode
+- **PHP**: 8.1+
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+## 📋 Struktur Database
 
-## Setup
+### Tabel `users`
+- `id` (Primary Key)
+- `username` (Unique)
+- `password` (Hashed)
+- `role` (super_admin/admin_restoran)
+- `restoran_id` (Foreign Key)
+- `created_at`, `updated_at`
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+### Tabel `restoran`
+- `id` (Primary Key)
+- `nama`
+- `alamat`
+- `kontak`
+- `created_at`, `updated_at`
 
-## Important Change with index.php
+### Tabel `kategori`
+- `id` (Primary Key)
+- `nama`
+- `restoran_id` (Foreign Key)
+- `created_at`, `updated_at`
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+### Tabel `menu`
+- `id` (Primary Key)
+- `nama`
+- `harga`
+- `kategori_id` (Foreign Key)
+- `gambar`
+- `deskripsi`
+- `stok`
+- `created_at`, `updated_at`
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+### Tabel `pesanan`
+- `id` (Primary Key)
+- `restoran_id` (Foreign Key)
+- `metode` (dine_in/take_away)
+- `total`
+- `waktu_pesan`
+- `status` (pending/confirmed/completed/cancelled)
+- `created_at`, `updated_at`
 
-**Please** read the user guide for a better explanation of how CI4 works!
+### Tabel `pesanan_detail`
+- `id` (Primary Key)
+- `pesanan_id` (Foreign Key)
+- `menu_id` (Foreign Key)
+- `jumlah`
+- `harga_satuan`
+- `subtotal`
+- `catatan`
+- `created_at`, `updated_at`
 
-## Repository Management
+## 🚀 Instalasi
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+### 1. Clone Repository
+```bash
+git clone <repository-url>
+cd Buku-Menu
+```
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+### 2. Install Dependencies
+```bash
+composer install
+```
 
-## Server Requirements
+### 3. Konfigurasi Database
+1. Buat database MySQL baru
+2. Copy file `env` ke `.env`
+3. Edit file `.env`:
+```env
+database.default.hostname = localhost
+database.default.database = nama_database_anda
+database.default.username = username_database_anda
+database.default.password = password_database_anda
+```
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+### 4. Jalankan Migration
+```bash
+php spark migrate
+```
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+### 5. Jalankan Seeder
+```bash
+php spark db:seed InitialDataSeeder
+```
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+### 6. Buat Folder Upload
+```bash
+mkdir public/uploads/menu
+chmod 777 public/uploads/menu
+```
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+### 7. Jalankan Server
+```bash
+php spark serve
+```
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+## 👤 Akun Default
+
+### Super Admin
+- **Username**: `superadmin`
+- **Password**: `superadmin123`
+
+### Admin Restoran
+- **Username**: `admin`
+- **Password**: `admin123`
+
+## 📱 Cara Penggunaan
+
+### Untuk Super Admin
+1. Login dengan akun super admin
+2. Tambah restoran baru
+3. Buat akun admin untuk restoran tersebut
+4. Monitor semua restoran dari dashboard
+
+### Untuk Admin Restoran
+1. Login dengan akun admin restoran
+2. Tambah kategori menu (Makanan, Minuman, dll)
+3. Tambah menu dengan gambar dan detail
+4. Generate QR Code untuk menu pelanggan
+5. Monitor pesanan pelanggan
+
+### Untuk Pelanggan
+1. Scan QR Code atau buka link menu
+2. Pilih menu yang diinginkan
+3. Masukkan jumlah dan catatan
+4. Tambah ke keranjang
+5. Checkout dengan pilihan dine in/take away
+6. Lihat detail pesanan
+
+## 🔧 Konfigurasi Tambahan
+
+### QR Code
+Sistem menggunakan library Endroid/QrCode untuk generate QR Code. QR Code akan mengarahkan ke URL menu pelanggan.
+
+### Upload Gambar
+- Folder upload: `public/uploads/menu/`
+- Format yang didukung: JPG, PNG, GIF
+- Maksimal ukuran: 2MB
+
+### Session
+Sistem menggunakan session untuk menyimpan keranjang belanja pelanggan.
+
+## 📁 Struktur Folder
+
+```
+Buku-Menu/
+├── app/
+│   ├── Config/
+│   ├── Controllers/
+│   │   ├── Admin.php
+│   │   ├── Auth.php
+│   │   ├── Customer.php
+│   │   ├── QRCodeController.php
+│   │   └── SuperAdmin.php
+│   ├── Database/
+│   │   ├── Migrations/
+│   │   └── Seeds/
+│   ├── Filters/
+│   ├── Models/
+│   └── Views/
+│       ├── admin/
+│       ├── auth/
+│       ├── customer/
+│       ├── layouts/
+│       └── super_admin/
+├── public/
+│   └── uploads/
+└── writable/
+```
+
+## 🐛 Troubleshooting
+
+### Error Database
+- Pastikan database sudah dibuat
+- Periksa konfigurasi di file `.env`
+- Jalankan `php spark migrate:status` untuk cek status migration
+
+### Error Upload Gambar
+- Pastikan folder `public/uploads/menu/` sudah dibuat
+- Periksa permission folder (777)
+- Pastikan format file didukung
+
+### Error QR Code
+- Pastikan library Endroid/QrCode sudah terinstall
+- Jalankan `composer install` ulang
+
+## 📞 Support
+
+Jika ada pertanyaan atau masalah, silakan buat issue di repository ini.
+
+## 📄 License
+
+MIT License - silakan gunakan untuk keperluan komersial maupun non-komersial.
+
+---
+
+**Dibuat dengan ❤️ menggunakan CodeIgniter 4**
