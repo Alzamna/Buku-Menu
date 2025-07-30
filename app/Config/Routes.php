@@ -61,6 +61,7 @@ $routes->post('customer/update-cart', 'Customer::updateCart');
 $routes->get('customer/remove-from-cart/(:num)', 'Customer::removeFromCart/$1');
 $routes->get('customer/checkout', 'Customer::checkout');
 $routes->post('customer/checkout', 'Customer::checkout');
+$routes->get('customer/completion/(:num)', 'Customer::completion/$1');
 $routes->get('customer/order/(:num)', 'Customer::order/$1');
 $routes->get('customer/clear-cart', 'Customer::clearCart');
 

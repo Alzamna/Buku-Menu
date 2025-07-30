@@ -218,7 +218,7 @@ class Customer extends BaseController
                 session()->remove('cart');
 
                 session()->setFlashdata('success', 'Pesanan berhasil dibuat!');
-                return redirect()->to("/customer/order/{$pesananId}");
+                return redirect()->to("/customer/completion/{$pesananId}");
             } else {
                 session()->setFlashdata('error', 'Gagal membuat pesanan!');
                 return redirect()->back();
@@ -237,6 +237,25 @@ class Customer extends BaseController
         ];
 
         return view('customer/checkout', $data);
+    }
+
+    public function completion($pesananId)
+    {
+        $pesanan = $this->pesananModel->getPesananWithDetails($pesananId);
+        
+        if (!$pesanan) {
+            return redirect()->to('/')->with('error', 'Pesanan tidak ditemukan!');
+        }
+
+        $detailList = $this->pesananDetailModel->getDetailByPesanan($pesananId);
+
+        $data = [
+            'title' => 'Pesanan Selesai',
+            'pesanan' => $pesanan,
+            'detail_list' => $detailList,
+        ];
+
+        return view('customer/completion', $data);
     }
 
     public function order($pesananId)
