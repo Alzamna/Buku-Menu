@@ -12,7 +12,11 @@
     "require": {
         "php": "^8.1",
         "codeigniter4/framework": "^4.0",
+<<<<<<< HEAD
         "endroid/qr-code": "^4.8"
+=======
+        "endroid/qr-code": "^6.0"
+>>>>>>> 2ad236d4f8bbba35e4858b1611062d4175f0fa14
     },
     "require-dev": {
         "fakerphp/faker": "^1.9",

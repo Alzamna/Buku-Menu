@@ -6,6 +6,7 @@ use CodeIgniter\Model;
 
 class MenuModel extends Model
 {
+<<<<<<< HEAD
     protected $table = 'menu';
     protected $primaryKey = 'id';
     protected $useAutoIncrement = true;
@@ -95,3 +96,29 @@ class MenuModel extends Model
         return false;
     }
 } 
+=======
+    protected $table = 'menus';             // Nama tabel database
+    protected $primaryKey = 'id';                // Primary key
+    protected $useAutoIncrement = true;
+
+    protected $returnType = 'array';             // Bisa 'object' atau 'array'
+    protected $useSoftDeletes = false;
+
+    protected $allowedFields = [
+        'nama',
+        'deskripsi',
+        'harga',
+        'gambar',
+        'kategori'
+    ]; // Field yang boleh diinput
+
+    protected $useTimestamps = true;                  // Otomatis kelola created_at dan updated_at
+    protected $createdField = 'created_at';
+    protected $updatedField = 'updated_at';
+
+    // Validasi opsional (bisa kamu aktifkan jika ingin digunakan)
+    protected $validationRules = [];
+    protected $validationMessages = [];
+    protected $skipValidation = false;
+}
+>>>>>>> 2ad236d4f8bbba35e4858b1611062d4175f0fa14
