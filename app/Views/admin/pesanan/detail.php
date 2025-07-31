@@ -41,6 +41,19 @@
                                 <?php endif; ?>
                             </td>
                         </tr>
+                        <?php if ($pesanan['nomor_meja']): ?>
+                        <tr>
+                            <td><strong>Meja:</strong></td>
+                            <td>
+                                <span class="badge bg-info">
+                                    <i class="fas fa-table me-1"></i>Meja <?= $pesanan['nomor_meja'] ?>
+                                </span>
+                                <?php if ($pesanan['meja_keterangan']): ?>
+                                    <br><small class="text-muted"><?= $pesanan['meja_keterangan'] ?></small>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <?php endif; ?>
                         <tr>
                             <td><strong>Status:</strong></td>
                             <td>

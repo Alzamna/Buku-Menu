@@ -12,7 +12,7 @@ class PesananModel extends Model
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
-    protected $allowedFields = ['restoran_id', 'metode', 'total', 'waktu_pesan', 'status', 'nama', 'telepon', 'meja'];
+    protected $allowedFields = ['restoran_id', 'meja_id', 'metode', 'total', 'waktu_pesan', 'status', 'nama', 'telepon', 'meja'];
 
     // Dates
     protected $useTimestamps = true;
@@ -66,8 +66,9 @@ class PesananModel extends Model
 
     public function getPesananWithDetails($pesananId)
     {
-        return $this->select('pesanan.*, restoran.nama as nama_restoran')
+        return $this->select('pesanan.*, restoran.nama as nama_restoran, meja.nomor_meja, meja.keterangan as meja_keterangan')
                     ->join('restoran', 'restoran.id = pesanan.restoran_id')
+                    ->join('meja', 'meja.id = pesanan.meja_id', 'left')
                     ->where('pesanan.id', $pesananId)
                     ->first();
     }

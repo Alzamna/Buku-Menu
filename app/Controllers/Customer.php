@@ -25,12 +25,26 @@ class Customer extends BaseController
         $this->restoranModel = new RestoranModel();
     }
 
-    public function menu($restoranId)
+    public function menu($restoranId, $mejaId = null)
     {
         $restoran = $this->restoranModel->find($restoranId);
 
         if (!$restoran) {
             return redirect()->to('/')->with('error', 'Restoran tidak ditemukan!');
+        }
+
+        $meja = null;
+        if ($mejaId) {
+            $mejaModel = new \App\Models\MejaModel();
+            $meja = $mejaModel->find($mejaId);
+            if (!$meja || $meja['restoran_id'] != $restoranId) {
+                return redirect()->to('/')->with('error', 'Meja tidak ditemukan!');
+            }
+            // Store meja_id in session for checkout
+            session()->set('meja_id', $mejaId);
+        } else {
+            // Clear meja_id from session if no meja specified
+            session()->remove('meja_id');
         }
 
         $kategoriList = $this->kategoriModel->getKategoriByRestoran($restoranId);
@@ -49,6 +63,7 @@ class Customer extends BaseController
         $data = [
             'title' => 'Menu - ' . $restoran['nama'],
             'restoran' => $restoran,
+            'meja' => $meja,
             'kategori_list' => $kategoriList,
             'menu_by_kategori' => $menuByKategori,
         ];
@@ -227,6 +242,7 @@ class Customer extends BaseController
             // Create order
             $pesananData = [
                 'restoran_id' => $restoranId,
+                'meja_id' => session()->get('meja_id'),
                 'metode' => $metode,
                 'total' => $total,
                 'waktu_pesan' => date('Y-m-d H:i:s'),
