@@ -59,8 +59,11 @@ $routes->post('customer/add-to-cart', 'Customer::addToCart');
 $routes->get('customer/cart', 'Customer::cart');
 $routes->post('customer/update-cart', 'Customer::updateCart');
 $routes->get('customer/remove-from-cart/(:num)', 'Customer::removeFromCart/$1');
+$routes->get('customer/identity', 'Customer::identityForm');
+$routes->post('customer/submit-identitas', 'Customer::submitIdentitas');
 $routes->get('customer/checkout', 'Customer::checkout');
 $routes->post('customer/checkout', 'Customer::checkout');
+$routes->get('customer/completion/(:num)', 'Customer::completion/$1');
 $routes->get('customer/order/(:num)', 'Customer::order/$1');
 $routes->get('customer/clear-cart', 'Customer::clearCart');
 

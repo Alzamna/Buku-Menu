@@ -109,6 +109,30 @@
             </div>
         </div>
     </div>
+<!-- Info Identitas Customer -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">
+            <i class="fas fa-user me-2"></i>Identitas Pemesan
+        </h6>
+    </div>
+    <div class="card-body">
+        <table class="table table-borderless">
+            <tr>
+                <td><strong>Nama:</strong></td>
+                <td><?= esc($pesanan['nama'] ?? '-') ?></td>
+            </tr>
+            <tr>
+                <td><strong>No HP:</strong></td>
+                <td><?= esc($pesanan['telepon'] ?? '-') ?></td>
+            </tr>
+            <tr>
+                <td><strong>Meja:</strong></td>
+                <td><?= esc($pesanan['meja'] ?? '-') ?></td>
+            </tr>
+        </table>
+    </div>
+</div>
 
     <!-- Detail Items -->
     <div class="card shadow">

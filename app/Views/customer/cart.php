@@ -166,7 +166,7 @@
                             
                             <div class="text-end">
                                 <h4 class="text-success">Total: Rp <?= number_format($total, 0, ',', '.') ?></h4>
-                                <a href="<?= base_url('customer/checkout') ?>" class="btn btn-primary btn-lg">
+                                <a href="<?= base_url('customer/identity') ?>" class="btn btn-primary btn-lg">
                                     <i class="fas fa-credit-card me-2"></i>Checkout
                                 </a>
                             </div>
