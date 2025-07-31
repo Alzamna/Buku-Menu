@@ -128,6 +128,9 @@
                         <a href="<?= base_url('admin/menu/create') ?>" class="btn btn-success">
                             <i class="fas fa-utensils me-2"></i>Tambah Menu
                         </a>
+                        <a href="<?= base_url('admin/meja/create') ?>" class="btn btn-secondary">
+                            <i class="fas fa-table me-2"></i>Tambah Meja
+                        </a>
                         <a href="<?= base_url('admin/pesanan') ?>" class="btn btn-warning">
                             <i class="fas fa-shopping-cart me-2"></i>Lihat Pesanan
                         </a>

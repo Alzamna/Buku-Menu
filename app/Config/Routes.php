@@ -49,12 +49,22 @@ $routes->group('admin', ['filter' => 'admin_restoran'], function($routes) {
     $routes->get('pesanan', 'Admin::pesanan');
     $routes->get('pesanan/detail/(:num)', 'Admin::pesananDetail/$1');
     $routes->post('pesanan/update-status/(:num)', 'Admin::pesananUpdateStatus/$1');
+    $routes->get('qrcode', 'QRCodeController::index');
     $routes->get('qrcode/display/(:num)', 'QRCodeController::display/$1');
     $routes->get('qrcode/download/(:num)', 'QRCodeController::download/$1');
+    $routes->get('qrcode/generate-meja/(:num)/(:num)', 'QRCodeController::generateMeja/$1/$2');
+    $routes->get('qrcode/download-meja/(:num)/(:num)', 'QRCodeController::downloadMeja/$1/$2');
+    $routes->get('meja', 'MejaController::index');
+    $routes->get('meja/create', 'MejaController::create');
+    $routes->post('meja/store', 'MejaController::store');
+    $routes->get('meja/edit/(:num)', 'MejaController::edit/$1');
+    $routes->post('meja/update/(:num)', 'MejaController::update/$1');
+    $routes->get('meja/delete/(:num)', 'MejaController::delete/$1');
 });
 
 // Customer Routes (Public)
 $routes->get('customer/menu/(:num)', 'Customer::menu/$1');
+$routes->get('customer/menu/(:num)/meja/(:num)', 'Customer::menu/$1/$2');
 $routes->post('customer/add-to-cart', 'Customer::addToCart');
 $routes->get('customer/cart', 'Customer::cart');
 $routes->post('customer/update-cart', 'Customer::updateCart');

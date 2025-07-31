@@ -90,6 +90,11 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link <?= strpos(current_url(), 'admin/meja') !== false ? 'active' : '' ?>" href="<?= base_url('admin/meja') ?>">
+                                    <i class="fas fa-table me-2"></i>Kelola Meja
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link <?= strpos(current_url(), 'admin/pesanan') !== false ? 'active' : '' ?>" href="<?= base_url('admin/pesanan') ?>">
                                     <i class="fas fa-shopping-cart me-2"></i>Kelola Pesanan
                                 </a>

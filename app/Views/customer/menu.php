@@ -130,6 +130,16 @@
             <div class="restaurant-header">
                 <i class="fas fa-store fa-3x mb-3"></i>
                 <h2 class="mb-2"><?= $restoran['nama'] ?></h2>
+                <?php if ($meja): ?>
+                    <div class="alert alert-light alert-dismissible fade show mb-3" role="alert">
+                        <i class="fas fa-table me-2"></i>
+                        <strong>Meja <?= $meja['nomor_meja'] ?></strong>
+                        <?php if ($meja['keterangan']): ?>
+                            - <?= $meja['keterangan'] ?>
+                        <?php endif; ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                <?php endif; ?>
                 <p class="mb-2">
                     <i class="fas fa-map-marker-alt me-2"></i><?= $restoran['alamat'] ?>
                 </p>
