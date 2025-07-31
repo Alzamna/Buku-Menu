@@ -24,7 +24,7 @@
                 <div class="card-body">
                     <table class="table table-borderless">
                         <tr>
-                            <td><strong>ID Pesanan:</strong></td>
+                            <td><strong>Nomer Meja:</strong></td>
                             <td>#<?= $pesanan['id'] ?></td>
                         </tr>
                         <tr>
@@ -63,15 +63,15 @@
                                 switch ($pesanan['status']) {
                                     case 'pending':
                                         $statusClass = 'bg-warning';
-                                        $statusText = 'Pending';
+                                        $statusText = 'Proses';
                                         break;
                                     case 'confirmed':
                                         $statusClass = 'bg-info';
-                                        $statusText = 'Dikonfirmasi';
+                                        $statusText = 'Antar';
                                         break;
                                     case 'completed':
                                         $statusClass = 'bg-success';
-                                        $statusText = 'Selesai';
+                                        $statusText = 'Bayar';
                                         break;
                                     case 'cancelled':
                                         $statusClass = 'bg-danger';
@@ -108,8 +108,8 @@
                         <div class="mb-3">
                             <label for="status" class="form-label">Status Pesanan</label>
                             <select class="form-control" id="status" name="status">
-                                <option value="pending" <?= $pesanan['status'] === 'pending' ? 'selected' : '' ?>>Pending</option>
-                                <option value="confirmed" <?= $pesanan['status'] === 'confirmed' ? 'selected' : '' ?>>Dikonfirmasi</option>
+                                <option value="pending" <?= $pesanan['status'] === 'pending' ? 'selected' : '' ?>>Proses</option>
+                                <option value="confirmed" <?= $pesanan['status'] === 'confirmed' ? 'selected' : '' ?>>Antar</option>
                                 <option value="completed" <?= $pesanan['status'] === 'completed' ? 'selected' : '' ?>>Selesai</option>
                                 <option value="cancelled" <?= $pesanan['status'] === 'cancelled' ? 'selected' : '' ?>>Dibatalkan</option>
                             </select>

@@ -60,11 +60,11 @@
                                         switch ($pesanan['status']) {
                                             case 'pending':
                                                 $statusClass = 'bg-warning';
-                                                $statusText = 'Pending';
+                                                $statusText = 'Proses';
                                                 break;
                                             case 'confirmed':
                                                 $statusClass = 'bg-info';
-                                                $statusText = 'Dikonfirmasi';
+                                                $statusText = 'Antar';
                                                 break;
                                             case 'completed':
                                                 $statusClass = 'bg-success';

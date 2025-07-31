@@ -12,7 +12,7 @@ class PesananModel extends Model
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
-    protected $allowedFields = ['restoran_id', 'meja_id', 'metode', 'total', 'waktu_pesan', 'status', 'nama', 'telepon', 'meja'];
+    protected $allowedFields = ['restoran_id', 'metode', 'total', 'waktu_pesan', 'status', 'nama', 'telepon'];
 
     // Dates
     protected $useTimestamps = true;
@@ -60,29 +60,28 @@ class PesananModel extends Model
     public function getPesananByRestoran($restoranId)
     {
         return $this->where('restoran_id', $restoranId)
-                    ->orderBy('waktu_pesan', 'DESC')
-                    ->findAll();
+            ->orderBy('waktu_pesan', 'DESC')
+            ->findAll();
     }
 
     public function getPesananWithDetails($pesananId)
     {
-        return $this->select('pesanan.*, restoran.nama as nama_restoran, meja.nomor_meja, meja.keterangan as meja_keterangan')
-                    ->join('restoran', 'restoran.id = pesanan.restoran_id')
-                    ->join('meja', 'meja.id = pesanan.meja_id', 'left')
-                    ->where('pesanan.id', $pesananId)
-                    ->first();
+        return $this->select('pesanan.*, restoran.nama as nama_restoran')
+            ->join('restoran', 'restoran.id = pesanan.restoran_id')
+            ->where('pesanan.id', $pesananId)
+            ->first();
     }
 
     public function getPesananByStatus($restoranId, $status)
     {
         return $this->where('restoran_id', $restoranId)
-                    ->where('status', $status)
-                    ->orderBy('waktu_pesan', 'DESC')
-                    ->findAll();
+            ->where('status', $status)
+            ->orderBy('waktu_pesan', 'DESC')
+            ->findAll();
     }
 
     public function updateStatus($pesananId, $status)
     {
         return $this->update($pesananId, ['status' => $status]);
     }
-} 
+}

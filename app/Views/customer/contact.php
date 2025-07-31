@@ -24,10 +24,7 @@
                 <input type="text" class="form-control" id="telepon" name="telepon" required>
             </div>
     
-            <div class="mb-3">
-                <label for="meja" class="form-label">Nomor Meja</label>
-                <input type="text" class="form-control" id="meja" name="meja" required>
-            </div>
+         
     
             <div class="mb-4">
                 <h5>Total Bayar:
