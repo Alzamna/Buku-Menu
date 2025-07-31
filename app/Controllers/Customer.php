@@ -189,7 +189,7 @@ class Customer extends BaseController
         $identitas = [
             'nama' => $this->request->getPost('nama'),
             'telepon' => $this->request->getPost('telepon'),
-            'meja' => $this->request->getPost('meja'),
+        
         ];
         session()->set('identitas', $identitas);
         return redirect()->to('/customer/checkout');
@@ -233,7 +233,7 @@ class Customer extends BaseController
                 'status' => 'pending',
                 'nama' => $identitas['nama'] ?? null,
                 'telepon' => $identitas['telepon'] ?? null,
-                'meja' => $identitas['meja'] ?? null,
+               
             ];
 
             $pesananId = $this->pesananModel->insert($pesananData);
