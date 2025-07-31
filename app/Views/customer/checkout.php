@@ -220,7 +220,7 @@
                                     <div class="card-body">
                                         <p><strong>Nama:</strong> <?= esc($identitas['nama']) ?></p>
                                         <p><strong>No HP:</strong> <?= esc($identitas['telepon']) ?></p>
-                                        <p><strong>Nomor Meja:</strong> <?= esc($identitas['meja']) ?></p>
+                                       
                                     </div>
                                 </div>
                             </div>

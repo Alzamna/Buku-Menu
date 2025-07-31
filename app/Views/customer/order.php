@@ -168,7 +168,7 @@
                                 </div>
                             </div>
                         </div>
-                        <?php if (!empty($pesanan['nama']) || !empty($pesanan['telepon']) || !empty($pesanan['meja'])): ?>
+                        <?php if (!empty($pesanan['nama']) || !empty($pesanan['telepon']) ): ?>
                             <div class="px-4 pt-3">
                                 <div class="card shadow mb-4">
                                     <div class="card-header bg-light">
@@ -179,7 +179,7 @@
                                     <div class="card-body">
                                         <p><strong>Nama:</strong> <?= esc($pesanan['nama']) ?></p>
                                         <p><strong>No HP:</strong> <?= esc($pesanan['telepon']) ?></p>
-                                        <p><strong>Nomor Meja:</strong> <?= esc($pesanan['meja']) ?></p>
+                                   
                                     </div>
                                 </div>
                             </div>
