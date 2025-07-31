@@ -25,30 +25,33 @@ class Customer extends BaseController
         $this->restoranModel = new RestoranModel();
     }
 
-    public function menu($restoranId, $mejaId = null)
+    public function menu($restoranUuid, $mejaUuid = null)
     {
-        $restoran = $this->restoranModel->find($restoranId);
+        $restoran = $this->restoranModel->findByUuid($restoranUuid);
 
         if (!$restoran) {
             return redirect()->to('/')->with('error', 'Restoran tidak ditemukan!');
         }
 
+        // Store restaurant ID in session for checkout
+        session()->set('restoran_id', $restoran['id']);
+
         $meja = null;
-        if ($mejaId) {
+        if ($mejaUuid) {
             $mejaModel = new \App\Models\MejaModel();
-            $meja = $mejaModel->find($mejaId);
-            if (!$meja || $meja['restoran_id'] != $restoranId) {
+            $meja = $mejaModel->findByUuid($mejaUuid);
+            if (!$meja || $meja['restoran_id'] != $restoran['id']) {
                 return redirect()->to('/')->with('error', 'Meja tidak ditemukan!');
             }
             // Store meja_id in session for checkout
-            session()->set('meja_id', $mejaId);
+            session()->set('meja_id', $meja['id']);
         } else {
             // Clear meja_id from session if no meja specified
             session()->remove('meja_id');
         }
 
-        $kategoriList = $this->kategoriModel->getKategoriByRestoran($restoranId);
-        $menuList = $this->menuModel->getMenuByRestoran($restoranId);
+        $kategoriList = $this->kategoriModel->getKategoriByRestoran($restoran['id']);
+        $menuList = $this->menuModel->getMenuByRestoran($restoran['id']);
 
         // Group menu by category
         $menuByKategori = [];
@@ -239,17 +242,30 @@ class Customer extends BaseController
                 $total += $item['harga'] * $item['jumlah'];
             }
 
+            // Get customer info from session (already collected previously)
+            $nama = $identitas['nama'] ?? '';
+            $nomorHp = $identitas['telepon'] ?? '';
+            
+            // Get table number from meja session
+            $mejaId = session()->get('meja_id');
+            $nomorMeja = null;
+            if ($mejaId) {
+                $mejaModel = new \App\Models\MejaModel();
+                $meja = $mejaModel->find($mejaId);
+                $nomorMeja = $meja ? $meja['nomor_meja'] : null;
+            }
+
             // Create order
             $pesananData = [
                 'restoran_id' => $restoranId,
-                'meja_id' => session()->get('meja_id'),
+                'nama' => $nama,
+                'nomor_hp' => $nomorHp,
+                'nomor_meja' => $nomorMeja,
+                'catatan_pesanan' => null,
                 'metode' => $metode,
                 'total' => $total,
                 'waktu_pesan' => date('Y-m-d H:i:s'),
-                'status' => 'pending',
-                'nama' => $identitas['nama'] ?? null,
-                'telepon' => $identitas['telepon'] ?? null,
-               
+                'status' => 'confirmed',
             ];
 
             $pesananId = $this->pesananModel->insert($pesananData);
@@ -267,7 +283,6 @@ class Customer extends BaseController
                 session()->remove('cart');
                 // Clear identitas session
                 session()->remove('identitas');
-
 
                 session()->setFlashdata('success', 'Pesanan berhasil dibuat!');
                 return redirect()->to("/customer/completion/{$pesananId}");

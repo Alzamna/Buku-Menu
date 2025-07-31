@@ -97,7 +97,7 @@
                                                        title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
-                                                    <a href="<?= base_url('qrcode/download-meja/' . $restoran['id'] . '/' . $meja['id']) ?>" 
+                                                    <a href="<?= base_url('qrcode/download-meja/' . $restoran['uuid'] . '/' . $meja['uuid']) ?>" 
                                                        class="btn btn-sm btn-success" 
                                                        title="Download QR Code">
                                                         <i class="fas fa-download"></i>

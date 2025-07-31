@@ -134,7 +134,7 @@
                         <a href="<?= base_url('admin/pesanan') ?>" class="btn btn-warning">
                             <i class="fas fa-shopping-cart me-2"></i>Lihat Pesanan
                         </a>
-                        <a href="<?= base_url('admin/qrcode/display/' . session()->get('restoran_id')) ?>" class="btn btn-info">
+                        <a href="<?= base_url('admin/qrcode') ?>" class="btn btn-info">
                             <i class="fas fa-qrcode me-2"></i>QR Code Menu
                         </a>
                     </div>
