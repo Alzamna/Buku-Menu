@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,10 +12,12 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
         }
+
         .navbar {
             background: rgba(255, 255, 255, 0.95) !important;
             backdrop-filter: blur(10px);
         }
+
         .order-container {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -22,6 +25,7 @@
             margin-top: 20px;
             margin-bottom: 20px;
         }
+
         .order-header {
             background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
             color: white;
@@ -29,38 +33,51 @@
             padding: 2rem;
             text-align: center;
         }
+
         .order-item {
             border: 1px solid #e9ecef;
             border-radius: 15px;
             margin-bottom: 15px;
             transition: transform 0.3s ease;
         }
+
         .order-item:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
+
         .item-image {
             width: 60px;
             height: 60px;
             object-fit: cover;
             border-radius: 10px;
         }
+
         .success-animation {
             animation: bounce 2s infinite;
         }
+
         @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
                 transform: translateY(0);
             }
+
             40% {
                 transform: translateY(-10px);
             }
+
             60% {
                 transform: translateY(-5px);
             }
         }
     </style>
 </head>
+
 <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top">
@@ -68,7 +85,7 @@
             <a class="navbar-brand" href="#">
                 <i class="fas fa-check-circle me-2"></i>Pesanan Berhasil
             </a>
-            
+
             <div class="navbar-nav ms-auto">
                 <a href="<?= base_url() ?>" class="btn btn-outline-primary">
                     <i class="fas fa-home me-2"></i>Beranda
@@ -142,13 +159,31 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Total:</strong></td>
-                                                <td><strong class="text-success">Rp <?= number_format($pesanan['total'] * 1.11, 0, ',', '.') ?></strong></td>
+                                                <td><strong class="text-success">Rp
+                                                        <?= number_format($pesanan['total'] * 1.11, 0, ',', '.') ?></strong>
+                                                </td>
                                             </tr>
                                         </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <?php if (!empty($pesanan['nama']) || !empty($pesanan['telepon']) || !empty($pesanan['meja'])): ?>
+                            <div class="px-4 pt-3">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header bg-light">
+                                        <h6 class="m-0 font-weight-bold text-primary">
+                                            <i class="fas fa-user me-2"></i>Informasi Pelanggan
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Nama:</strong> <?= esc($pesanan['nama']) ?></p>
+                                        <p><strong>No HP:</strong> <?= esc($pesanan['telepon']) ?></p>
+                                        <p><strong>Nomor Meja:</strong> <?= esc($pesanan['meja']) ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
 
                         <!-- Order Items -->
                         <div class="card shadow">
@@ -163,19 +198,21 @@
                                         <div class="row align-items-center">
                                             <div class="col-md-2">
                                                 <?php if ($detail['gambar']): ?>
-                                                    <img src="<?= base_url('uploads/menu/' . $detail['gambar']) ?>" 
-                                                         alt="<?= $detail['nama_menu'] ?>" class="item-image">
+                                                    <img src="<?= base_url('uploads/menu/' . $detail['gambar']) ?>"
+                                                        alt="<?= $detail['nama_menu'] ?>" class="item-image">
                                                 <?php else: ?>
-                                                    <div class="bg-light d-flex align-items-center justify-content-center item-image">
+                                                    <div
+                                                        class="bg-light d-flex align-items-center justify-content-center item-image">
                                                         <i class="fas fa-utensils text-muted"></i>
                                                     </div>
                                                 <?php endif; ?>
                                             </div>
-                                            
+
                                             <div class="col-md-4">
                                                 <h6 class="mb-1"><?= esc($detail['nama_menu']) ?></h6>
                                                 <p class="text-muted mb-0">
-                                                    Jumlah: <?= $detail['jumlah'] ?> x Rp <?= number_format($detail['harga_satuan'], 0, ',', '.') ?>
+                                                    Jumlah: <?= $detail['jumlah'] ?> x Rp
+                                                    <?= number_format($detail['harga_satuan'], 0, ',', '.') ?>
                                                 </p>
                                                 <?php if ($detail['catatan']): ?>
                                                     <small class="text-info">
@@ -183,10 +220,11 @@
                                                     </small>
                                                 <?php endif; ?>
                                             </div>
-                                            
+
                                             <div class="col-md-3">
                                                 <p class="text-success mb-0">
-                                                    <strong>Rp <?= number_format($detail['subtotal'], 0, ',', '.') ?></strong>
+                                                    <strong>Rp
+                                                        <?= number_format($detail['subtotal'], 0, ',', '.') ?></strong>
                                                 </p>
                                             </div>
                                         </div>
@@ -195,7 +233,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-md-4">
                         <!-- Instructions -->
                         <div class="card shadow">
@@ -214,7 +252,7 @@
                                         <li>Ambil pesanan sesuai metode yang dipilih</li>
                                     </ol>
                                 </div>
-                                
+
                                 <div class="alert alert-warning">
                                     <h6><i class="fas fa-exclamation-triangle me-2"></i>Perhatian:</h6>
                                     <ul class="mb-0">
@@ -223,7 +261,7 @@
                                         <li>Simpan ID Pesanan untuk referensi</li>
                                     </ul>
                                 </div>
-                                
+
                                 <div class="d-grid gap-2">
                                     <a href="<?= base_url() ?>" class="btn btn-primary">
                                         <i class="fas fa-utensils me-2"></i>Pesan Lagi
@@ -242,4 +280,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html> 
+
+</html>

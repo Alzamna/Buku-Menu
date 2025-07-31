@@ -28,7 +28,7 @@ class Customer extends BaseController
     public function menu($restoranId)
     {
         $restoran = $this->restoranModel->find($restoranId);
-        
+
         if (!$restoran) {
             return redirect()->to('/')->with('error', 'Restoran tidak ditemukan!');
         }
@@ -112,7 +112,7 @@ class Customer extends BaseController
     public function cart()
     {
         $cart = session()->get('cart') ?? [];
-        
+
         if (empty($cart)) {
             return redirect()->to('/')->with('error', 'Keranjang kosong!');
         }
@@ -160,7 +160,7 @@ class Customer extends BaseController
     public function removeFromCart($index)
     {
         $cart = session()->get('cart') ?? [];
-        
+
         if (isset($cart[$index])) {
             unset($cart[$index]);
             $cart = array_values($cart); // Re-index array
@@ -171,12 +171,42 @@ class Customer extends BaseController
         return redirect()->to('/customer/cart');
     }
 
+    public function identityForm()
+    {
+        $cart = session()->get('cart') ?? [];
+        $total = 0;
+        foreach ($cart as $item) {
+            $total += $item['harga'] * $item['jumlah'];
+        }
+
+        return view('customer/contact', [
+            'total' => $total
+        ]);
+    }
+
+    public function submitIdentitas()
+    {
+        $identitas = [
+            'nama' => $this->request->getPost('nama'),
+            'telepon' => $this->request->getPost('telepon'),
+            'meja' => $this->request->getPost('meja'),
+        ];
+        session()->set('identitas', $identitas);
+        return redirect()->to('/customer/checkout');
+
+    }
+
     public function checkout()
     {
         $cart = session()->get('cart') ?? [];
-        
+        $identitas = session()->get('identitas') ?? [];
+
+
         if (empty($cart)) {
             return redirect()->to('/')->with('error', 'Keranjang kosong!');
+        }
+        if (empty($identitas)) {
+            return redirect()->to('/')->with('error', 'Identitas tidak lengkap!');
         }
 
         if ($this->request->getMethod() == 'POST') {
@@ -201,6 +231,9 @@ class Customer extends BaseController
                 'total' => $total,
                 'waktu_pesan' => date('Y-m-d H:i:s'),
                 'status' => 'pending',
+                'nama' => $identitas['nama'] ?? null,
+                'telepon' => $identitas['telepon'] ?? null,
+                'meja' => $identitas['meja'] ?? null,
             ];
 
             $pesananId = $this->pesananModel->insert($pesananData);
@@ -216,6 +249,9 @@ class Customer extends BaseController
 
                 // Clear cart
                 session()->remove('cart');
+                // Clear identitas session
+                session()->remove('identitas');
+
 
                 session()->setFlashdata('success', 'Pesanan berhasil dibuat!');
                 return redirect()->to("/customer/completion/{$pesananId}");
@@ -234,6 +270,7 @@ class Customer extends BaseController
             'title' => 'Checkout',
             'cart' => $cart,
             'total' => $total,
+            'identitas' => $identitas,
         ];
 
         return view('customer/checkout', $data);
@@ -261,17 +298,20 @@ class Customer extends BaseController
     public function order($pesananId)
     {
         $pesanan = $this->pesananModel->getPesananWithDetails($pesananId);
-        
+
         if (!$pesanan) {
             return redirect()->to('/')->with('error', 'Pesanan tidak ditemukan!');
         }
 
         $detailList = $this->pesananDetailModel->getDetailByPesanan($pesananId);
+        $restoran = $this->restoranModel->find($pesanan['restoran_id']);
 
         $data = [
             'title' => 'Detail Pesanan',
             'pesanan' => $pesanan,
             'detail_list' => $detailList,
+            'restoran' => $restoran,
+            
         ];
 
         return view('customer/order', $data);
@@ -283,4 +323,5 @@ class Customer extends BaseController
         session()->setFlashdata('success', 'Keranjang berhasil dikosongkan!');
         return redirect()->to('/');
     }
-} 
+
+}

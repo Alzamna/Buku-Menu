@@ -207,6 +207,26 @@
                                 </div>
                             </div>
                         </div>
+                        <?php $identitas = session()->get('identitas'); ?>
+                        <?php if (!empty($identitas)): ?>
+
+                            <div class="px-4 pt-3">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header bg-light">
+                                        <h6 class="m-0 font-weight-bold text-primary">
+                                            <i class="fas fa-user me-2"></i>Informasi Pelanggan
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Nama:</strong> <?= esc($identitas['nama']) ?></p>
+                                        <p><strong>No HP:</strong> <?= esc($identitas['telepon']) ?></p>
+                                        <p><strong>Nomor Meja:</strong> <?= esc($identitas['meja']) ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+
                     </div>
                 </form>
             </div>
