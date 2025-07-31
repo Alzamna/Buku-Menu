@@ -92,7 +92,7 @@ class QRCodeController extends BaseController
         } else {
             $filename = 'qr_menu_' . $restoran['nama'] . '.png';
         }
-        $filename = preg_replace('/[^a-zA-Z0-9_-]/', '_', $filename);
+        $filename = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $filename);
 
         // Download QR Code
         return $this->response
@@ -171,7 +171,7 @@ class QRCodeController extends BaseController
 
         // Set filename
         $filename = 'qr_menu_' . $restoran['nama'] . '_meja_' . $meja['nomor_meja'] . '.png';
-        $filename = preg_replace('/[^a-zA-Z0-9_-]/', '_', $filename);
+        $filename = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $filename);
 
         // Download QR Code
         return $this->response
