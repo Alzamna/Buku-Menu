@@ -66,6 +66,47 @@ class PesananModel extends Model
             ->findAll();
     }
 
+    public function getPesananWithPagination($restoranId, $query = null, $filter = 'terbaru', $status = '', $page = 1, $perPage = 15)
+    {
+        $builder = $this->where('restoran_id', $restoranId);
+        
+        // Apply search filter
+        if ($query) {
+            $builder->groupStart()
+                ->like('nama', $query)
+                ->orLike('kode_unik', $query)
+                ->orLike('metode', $query)
+                ->orLike('status', $query)
+                ->groupEnd();
+        }
+
+        // Apply status filter
+        if ($status && $status !== '') {
+            $builder->where('status', $status);
+        }
+
+        // Apply sorting filter
+        if ($filter === 'terbaru') {
+            $builder->orderBy('waktu_pesan', 'DESC');
+        } else {
+            $builder->orderBy('waktu_pesan', 'ASC');
+        }
+
+        // Get total count for pagination
+        $total = $builder->countAllResults(false);
+        
+        // Apply pagination
+        $offset = ($page - 1) * $perPage;
+        $data = $builder->limit($perPage, $offset)->findAll();
+
+        return [
+            'data' => $data,
+            'total' => $total,
+            'total_pages' => ceil($total / $perPage),
+            'current_page' => $page
+        ];
+    }
+
     public function getPesananWithDetails($pesananId)
     {
         return $this->select('pesanan.*, restoran.nama as nama_restoran')

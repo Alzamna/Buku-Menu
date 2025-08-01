@@ -5,7 +5,7 @@
     <!-- Page header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 mb-0 text-gray-800">
-            <i class="fas fa-eye me-2"></i>Detail Pesanan #<?= $pesanan['id'] ?>
+            <i class="fas fa-eye me-2"></i>Detail Pesanan #<?= $pesanan['kode_unik'] ?>
         </h1>
         <a href="<?= base_url('admin/pesanan') ?>" class="btn btn-secondary">
             <i class="fas fa-arrow-left me-2"></i>Kembali
@@ -24,8 +24,8 @@
                 <div class="card-body">
                     <table class="table table-borderless">
                         <tr>
-                            <td><strong>ID Pesanan:</strong></td>
-                            <td>#<?= $pesanan['id'] ?></td>
+                            <td><strong>ID Customer:</strong></td>
+                            <td>#<?= $pesanan['kode_unik'] ?></td>
                         </tr>
                         <tr>
                             <td><strong>Restoran:</strong></td>

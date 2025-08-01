@@ -31,8 +31,8 @@ class PesananDetailModel extends Model
 
     protected $validationMessages = [
         'pesanan_id' => [
-            'required' => 'ID Pesanan harus diisi',
-            'integer' => 'ID Pesanan tidak valid',
+            'required' => 'ID Customer harus diisi',
+            'integer' => 'ID Customer tidak valid',
             'is_not_unique' => 'Pesanan tidak ditemukan',
         ],
         'menu_id' => [
