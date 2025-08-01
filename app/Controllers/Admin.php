@@ -304,14 +304,29 @@ class Admin extends BaseController
     public function pesanan()
     {
         $restoranId = session()->get('restoran_id');
-        
+        $query = $this->request->getGet('q');
+
+        if ($query) {
+            $pesanan_list = $this->pesananModel
+                ->where('restoran_id', $restoranId)
+                ->groupStart()
+                ->like('id', $query)
+                ->orLike('nama', $query)
+                ->orLike('kode_unik', $query)
+                ->groupEnd()
+                ->findAll();
+        } else {
+            $pesanan_list = $this->pesananModel->getPesananByRestoran($restoranId);
+        }
+
         $data = [
             'title' => 'Kelola Pesanan',
-            'pesanan_list' => $this->pesananModel->getPesananByRestoran($restoranId)
+            'pesanan_list' => $pesanan_list
         ];
 
         return view('admin/pesanan/index', $data);
     }
+
 
     public function pesananDetail($id)
     {

@@ -8,7 +8,15 @@
             <i class="fas fa-shopping-cart me-2"></i>Kelola Pesanan
         </h1>
     </div>
-
+<!-- Search bar -->
+<div class="d-flex justify-content-end mb-3">
+    <form action="<?= base_url('admin/pesanan') ?>" method="get" class="d-flex" style="max-width: 300px;">
+        <input type="text" name="q" class="form-control form-control-sm me-2" placeholder="Cari ID / Nama...">
+        <button type="submit" class="btn btn-sm btn-primary">
+            <i class="fas fa-search"></i>
+        </button>
+    </form>
+</div>
     <!-- Pesanan List -->
     <div class="card shadow">
         <div class="card-header py-3">
@@ -23,6 +31,7 @@
                         <tr>
                             <th>No</th>
                             <th>ID Pesanan</th>
+                            <th>ID Customer</th>
                             <th>Nama Customer</th>
                             <th>Metode</th>
                             <th>No Meja</th>
@@ -43,6 +52,9 @@
                                     <td><?= $index + 1 ?></td>
                                     <td>
                                         <strong>#<?= $pesanan['id'] ?></strong>
+                                    </td>
+                                    <td>
+                                        <strong>#<?= $pesanan['kode_unik'] ?></strong>
                                     </td>
                                     <td><?= htmlspecialchars($pesanan['nama']) ?></td>
                                     <td>
