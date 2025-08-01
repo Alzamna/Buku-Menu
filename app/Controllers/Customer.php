@@ -255,7 +255,7 @@ class Customer extends BaseController
             }
 
             $kodeUnik = bin2hex(random_bytes(4)); // e.g., a1b2c3d4
-
+            date_default_timezone_set('Asia/Jakarta');
             $pesananData = [
                 'restoran_id' => $restoranId,
                 'nama' => $nama,

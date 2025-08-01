@@ -23,6 +23,7 @@
                         <tr>
                             <th>No</th>
                             <th>ID Pesanan</th>
+                            <th>Nama Customer</th>
                             <th>Metode</th>
                             <th>Total</th>
                             <th>Waktu Pesan</th>
@@ -42,6 +43,7 @@
                                     <td>
                                         <strong>#<?= $pesanan['id'] ?></strong>
                                     </td>
+                                    <td><?= htmlspecialchars($pesanan['nama']) ?></td>
                                     <td>
                                         <?php if ($pesanan['metode'] === 'dine_in'): ?>
                                             <span class="badge bg-primary">Dine In</span>

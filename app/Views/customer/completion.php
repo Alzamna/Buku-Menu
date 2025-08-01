@@ -167,7 +167,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <p><strong>Nomor Pesanan:</strong></p>
-                                        <h5 class="text-primary">#<?= $pesanan['id'] ?></h5>
+                                        <h5 class="text-primary">#<?= $pesanan['kode_unik'] ?></h5>
                                     </div>
                                     <div class="col-md-6">
                                         <p><strong>Status:</strong></p>

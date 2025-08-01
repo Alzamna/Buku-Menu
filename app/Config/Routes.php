@@ -80,3 +80,4 @@ $routes->get('customer/clear-cart', 'Customer::clearCart');
 
 // QR Code Routes
 $routes->get('qrcode/generate/(:segment)', 'QRCodeController::generate/$1');
+$routes->get('qrcode/download-meja/(:segment)/(:segment)', 'QrCodeController::downloadMeja/$1/$2');
