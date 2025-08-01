@@ -276,48 +276,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Progress Status -->
-                        <div class="card shadow">
-                            <div class="card-header">
-                                <h6 class="m-0 font-weight-bold text-primary">
-                                    <i class="fas fa-tasks me-2"></i>Status Pesanan
-                                </h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="progress-container">
-                                    <div class="progress-step completed">
-                                        <div class="step-icon completed">
-                                            <i class="fas fa-check"></i>
-                                        </div>
-                                        <div>
-                                            <strong>Pesanan Dibuat</strong><br>
-                                            <small class="text-muted">Pesanan telah diterima</small>
-                                        </div>
-                                    </div>
-
-                                    <div class="progress-step current">
-                                        <div class="step-icon current">
-                                            <i class="fas fa-utensils"></i>
-                                        </div>
-                                        <div>
-                                            <strong>Sedang Diproses</strong><br>
-                                            <small class="text-muted">Tim kami sedang menyiapkan pesanan</small>
-                                        </div>
-                                    </div>
-
-                                    <div class="progress-step pending">
-                                        <div class="step-icon pending">
-                                            <i class="fas fa-clock"></i>
-                                        </div>
-                                        <div>
-                                            <strong>Siap Diambil</strong><br>
-                                            <small class="text-muted">Pesanan siap untuk diambil</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 

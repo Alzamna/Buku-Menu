@@ -347,6 +347,18 @@ class Customer extends BaseController
         $detailList = $this->pesananDetailModel->getDetailByPesanan($pesanan['id']);
         $restoran = $this->restoranModel->find($pesanan['restoran_id']);
 
+        // Store restaurant and table info for menu redirect
+        session()->set('completion_restoran_uuid', $restoran['uuid']);
+        if (isset($pesanan['meja']) && $pesanan['meja']) {
+            $mejaModel = new \App\Models\MejaModel();
+            $meja = $mejaModel->where('restoran_id', $pesanan['restoran_id'])
+                             ->where('nomor_meja', $pesanan['meja'])
+                             ->first();
+            if ($meja) {
+                session()->set('completion_meja_uuid', $meja['uuid']);
+            }
+        }
+
         $data = [
             'title' => 'Detail Pesanan',
             'pesanan' => $pesanan,

@@ -79,7 +79,7 @@
 </head>
 
 <body>
-    <div class="container" style="margin-top: 100px;">
+    <div class="container" style="margin-top: 20px;">
         <!-- Order Success Header -->
         <div class="order-container">
             <div class="order-header">
@@ -267,11 +267,39 @@
                                 </div>
 
                                 <div class="d-grid gap-2">
-                                    <a href="<?= base_url() ?>" class="btn btn-primary">
+                                    <?php 
+                                    // Try to get restaurant and table info from session first
+                                    $restoranUuid = session()->get('completion_restoran_uuid');
+                                    $mejaUuid = session()->get('completion_meja_uuid');
+                                    
+                                    // If session data is not available, try to get from pesanan data
+                                    if (!$restoranUuid && isset($restoran)) {
+                                        $restoranUuid = $restoran['uuid'];
+                                    }
+                                    
+                                    // If meja info is not available in session, try to get from pesanan data
+                                    if (!$mejaUuid && isset($pesanan['meja']) && $pesanan['meja']) {
+                                        // Try to find meja by nomor_meja
+                                        $mejaModel = new \App\Models\MejaModel();
+                                        $meja = $mejaModel->where('restoran_id', $pesanan['restoran_id'])
+                                                         ->where('nomor_meja', $pesanan['meja'])
+                                                         ->first();
+                                        if ($meja) {
+                                            $mejaUuid = $meja['uuid'];
+                                        }
+                                    }
+                                    
+                                    if ($restoranUuid) {
+                                        $menuUrl = base_url("customer/menu/{$restoranUuid}");
+                                        if ($mejaUuid) {
+                                            $menuUrl = base_url("customer/menu/{$restoranUuid}/meja/{$mejaUuid}");
+                                        }
+                                    } else {
+                                        $menuUrl = base_url('/');
+                                    }
+                                    ?>
+                                    <a href="<?= $menuUrl ?>" class="btn btn-primary">
                                         <i class="fas fa-utensils me-2"></i>Pesan Lagi
-                                    </a>
-                                    <a href="<?= base_url('customer/clear-cart') ?>" class="btn btn-outline-secondary">
-                                        <i class="fas fa-trash me-2"></i>Kosongkan Keranjang
                                     </a>
                                 </div>
                             </div>
@@ -283,6 +311,19 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Clean up session data after page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Send request to clean up session data
+            fetch('<?= base_url('customer/cleanup-completion-session') ?>', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
