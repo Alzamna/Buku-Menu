@@ -285,9 +285,10 @@
                                 </div>
 
                                 <div class="d-grid gap-2">
-                                    <a href="<?= base_url() ?>" class="btn btn-primary">
+                                    <a href="<?= session('last_menu_url') ?? base_url() ?>" class="btn btn-primary">
                                         <i class="fas fa-utensils me-2"></i>Pesan Lagi
                                     </a>
+
                                     <a href="<?= base_url('customer/clear-cart') ?>" class="btn btn-outline-secondary">
                                         <i class="fas fa-trash me-2"></i>Kosongkan Keranjang
                                     </a>

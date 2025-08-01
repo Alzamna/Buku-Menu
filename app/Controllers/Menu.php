@@ -14,7 +14,7 @@ class Menu extends BaseController
         return view('menu/index', [
             'menus' => $menus,
             'kategori' => $kategori,
-            'restoName' => 'The House of Den Baguse',
+            'restoName' => 'Depot Makan',
             'restoDescription' => 'Makanan enak, suasana nyaman.'
         ]);
     }

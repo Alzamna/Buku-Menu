@@ -78,6 +78,11 @@ $routes->get('customer/order/(:alphanum)', 'Customer::order/$1');
 
 $routes->get('customer/clear-cart', 'Customer::clearCart');
 
+
+$routes->get('customer/menu/(:segment)/(:segment)', 'Customer::menu/$1/$2');
+$routes->get('customer/menu/(:segment)', 'Customer::menu/$1');
+
+
 // QR Code Routes
 $routes->get('qrcode/generate/(:segment)', 'QRCodeController::generate/$1');
 $routes->get('qrcode/download-meja/(:segment)/(:segment)', 'QrCodeController::downloadMeja/$1/$2');

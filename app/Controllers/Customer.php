@@ -32,7 +32,9 @@ class Customer extends BaseController
         if (!$restoran) {
             return redirect()->to('/')->with('error', 'Restoran tidak ditemukan!');
         }
-
+        // Simpan URL asal scan QR ke session (untuk "Pesan Lagi")
+        $redirectUrl = base_url("customer/menu/{$restoranUuid}" . ($mejaUuid ? "/{$mejaUuid}" : ""));
+        session()->set('last_menu_url', $redirectUrl);
         // Store restaurant ID in session for checkout
         session()->set('restoran_id', $restoran['id']);
 
@@ -255,7 +257,7 @@ class Customer extends BaseController
             }
 
             $kodeUnik = bin2hex(random_bytes(4)); // e.g., a1b2c3d4
-            date_default_timezone_set('Asia/Jakarta');
+
             $pesananData = [
                 'restoran_id' => $restoranId,
                 'nama' => $nama,
