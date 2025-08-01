@@ -138,7 +138,29 @@
                                             <tr>
                                                 <td><strong>Status:</strong></td>
                                                 <td>
-                                                    <span class="badge bg-warning">Pending</span>
+                                                    <?php
+                                                    $statusClass = '';
+                                                    $statusText = '';
+                                                    switch ($pesanan['status']) {
+                                                        case 'pending':
+                                                            $statusClass = 'bg-warning';
+                                                            $statusText = 'Proses';
+                                                            break;
+                                                        case 'confirmed':
+                                                            $statusClass = 'bg-info';
+                                                            $statusText = 'Antar';
+                                                            break;
+                                                        case 'completed':
+                                                            $statusClass = 'bg-success';
+                                                            $statusText = 'Selesai';
+                                                            break;
+                                                        case 'cancelled':
+                                                            $statusClass = 'bg-danger';
+                                                            $statusText = 'Dibatalkan';
+                                                            break;
+                                                    }
+                                                    ?>
+                                                    <span class="badge <?= $statusClass ?>"><?= $statusText ?></span>
                                                 </td>
                                             </tr>
                                         </table>

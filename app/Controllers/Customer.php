@@ -264,7 +264,7 @@ class Customer extends BaseController
                 'metode' => $metode,
                 'total' => $total,
                 'waktu_pesan' => date('Y-m-d H:i:s'),
-                'status' => 'confirmed',
+                'status' => 'pending', // New orders should start with 'pending' status
             ];
 
             $pesananId = $this->pesananModel->insert($pesananData);
