@@ -24,6 +24,7 @@
                             <th>No</th>
                             <th>ID Pesanan</th>
                             <th>Metode</th>
+                            <th>No Meja</th>
                             <th>Total</th>
                             <th>Waktu Pesan</th>
                             <th>Status</th>
@@ -33,7 +34,7 @@
                     <tbody>
                         <?php if (empty($pesanan_list)): ?>
                             <tr>
-                                <td colspan="7" class="text-center">Tidak ada data pesanan</td>
+                                <td colspan="8" class="text-center">Tidak ada data pesanan</td>
                             </tr>
                         <?php else: ?>
                             <?php foreach ($pesanan_list as $index => $pesanan): ?>
@@ -47,6 +48,15 @@
                                             <span class="badge bg-primary">Dine In</span>
                                         <?php else: ?>
                                             <span class="badge bg-success">Take Away</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <?php if (isset($pesanan['meja']) && $pesanan['meja']): ?>
+                                            <span class="badge bg-info">
+                                                <i class="fas fa-table me-1"></i><?= $pesanan['meja'] ?>
+                                            </span>
+                                        <?php else: ?>
+                                            <span class="text-muted">-</span>
                                         <?php endif; ?>
                                     </td>
                                     <td>
