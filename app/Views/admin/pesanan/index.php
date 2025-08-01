@@ -8,14 +8,43 @@
             <i class="fas fa-shopping-cart me-2"></i>Kelola Pesanan
         </h1>
     </div>
-<!-- Search bar -->
-<div class="d-flex justify-content-end mb-3">
-    <form action="<?= base_url('admin/pesanan') ?>" method="get" class="d-flex" style="max-width: 300px;">
-        <input type="text" name="q" class="form-control form-control-sm me-2" placeholder="Cari ID / Nama...">
-        <button type="submit" class="btn btn-sm btn-primary">
-            <i class="fas fa-search"></i>
-        </button>
-    </form>
+<!-- Search and Filter bar -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex align-items-center">
+        <form action="<?= base_url('admin/pesanan') ?>" method="get" class="d-flex me-3" style="max-width: 300px;">
+            <input type="text" name="q" class="form-control form-control-sm me-2" placeholder="Cari ID Customer / Nama..." value="<?= esc($current_query ?? '') ?>">
+            <input type="hidden" name="filter" value="<?= esc($current_filter ?? 'terbaru') ?>">
+            <input type="hidden" name="status" value="<?= esc($current_status ?? '') ?>">
+            <button type="submit" class="btn btn-sm btn-primary">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+        
+        <form action="<?= base_url('admin/pesanan') ?>" method="get" class="d-flex me-2">
+            <input type="hidden" name="q" value="<?= esc($current_query ?? '') ?>">
+            <input type="hidden" name="status" value="<?= esc($current_status ?? '') ?>">
+            <select name="filter" class="form-select form-select-sm me-2" onchange="this.form.submit()">
+                <option value="terbaru" <?= ($current_filter ?? 'terbaru') === 'terbaru' ? 'selected' : '' ?>>Terbaru</option>
+                <option value="terlama" <?= ($current_filter ?? 'terbaru') === 'terlama' ? 'selected' : '' ?>>Terlama</option>
+            </select>
+        </form>
+        
+        <form action="<?= base_url('admin/pesanan') ?>" method="get" class="d-flex">
+            <input type="hidden" name="q" value="<?= esc($current_query ?? '') ?>">
+            <input type="hidden" name="filter" value="<?= esc($current_filter ?? 'terbaru') ?>">
+            <select name="status" class="form-select form-select-sm me-2" onchange="this.form.submit()">
+                <option value="">Semua Status</option>
+                <option value="pending" <?= ($current_status ?? '') === 'pending' ? 'selected' : '' ?>>Proses</option>
+                <option value="confirmed" <?= ($current_status ?? '') === 'confirmed' ? 'selected' : '' ?>>Antar</option>
+                <option value="completed" <?= ($current_status ?? '') === 'completed' ? 'selected' : '' ?>>Selesai</option>
+                <option value="cancelled" <?= ($current_status ?? '') === 'cancelled' ? 'selected' : '' ?>>Dibatalkan</option>
+            </select>
+        </form>
+    </div>
+    
+    <div class="text-muted small">
+        Menampilkan <?= count($pesanan_list) ?> dari <?= $total_records ?> data
+    </div>
 </div>
     <!-- Pesanan List -->
     <div class="card shadow">
@@ -30,7 +59,6 @@
                     <thead class="table-light">
                         <tr>
                             <th>No</th>
-                            <th>ID Pesanan</th>
                             <th>ID Customer</th>
                             <th>Nama Customer</th>
                             <th>Metode</th>
@@ -44,15 +72,18 @@
                     <tbody>
                         <?php if (empty($pesanan_list)): ?>
                             <tr>
-                                <td colspan="8" class="text-center">Tidak ada data pesanan</td>
+                                <td colspan="9" class="text-center">
+                                    <?php if ($current_query): ?>
+                                        Tidak ada data pesanan untuk pencarian "<?= esc($current_query) ?>"
+                                    <?php else: ?>
+                                        Tidak ada data pesanan
+                                    <?php endif; ?>
+                                </td>
                             </tr>
                         <?php else: ?>
                             <?php foreach ($pesanan_list as $index => $pesanan): ?>
                                 <tr>
                                     <td><?= $index + 1 ?></td>
-                                    <td>
-                                        <strong>#<?= $pesanan['id'] ?></strong>
-                                    </td>
                                     <td>
                                         <strong>#<?= $pesanan['kode_unik'] ?></strong>
                                     </td>
@@ -131,6 +162,64 @@
                     </tbody>
                 </table>
             </div>
+            
+            <!-- Pagination -->
+            <?php if ($total_pages > 1): ?>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-muted small">
+                        Halaman <?= $current_page ?> dari <?= $total_pages ?>
+                    </div>
+                    <nav aria-label="Pagination">
+                        <ul class="pagination pagination-sm mb-0">
+                            <?php if ($current_page > 1): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="<?= base_url('admin/pesanan?page=' . ($current_page - 1) . '&filter=' . $current_filter . '&status=' . urlencode($current_status ?? '') . '&q=' . urlencode($current_query ?? '')) ?>">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                            
+                            <?php
+                            $start = max(1, $current_page - 2);
+                            $end = min($total_pages, $current_page + 2);
+                            
+                            if ($start > 1): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="<?= base_url('admin/pesanan?page=1&filter=' . $current_filter . '&status=' . urlencode($current_status ?? '') . '&q=' . urlencode($current_query ?? '')) ?>">1</a>
+                                </li>
+                                <?php if ($start > 2): ?>
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                            
+                            <?php for ($i = $start; $i <= $end; $i++): ?>
+                                <li class="page-item <?= $i == $current_page ? 'active' : '' ?>">
+                                    <a class="page-link" href="<?= base_url('admin/pesanan?page=' . $i . '&filter=' . $current_filter . '&status=' . urlencode($current_status ?? '') . '&q=' . urlencode($current_query ?? '')) ?>"><?= $i ?></a>
+                                </li>
+                            <?php endfor; ?>
+                            
+                            <?php if ($end < $total_pages): ?>
+                                <?php if ($end < $total_pages - 1): ?>
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                <?php endif; ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="<?= base_url('admin/pesanan?page=' . $total_pages . '&filter=' . $current_filter . '&status=' . urlencode($current_status ?? '') . '&q=' . urlencode($current_query ?? '')) ?>"><?= $total_pages ?></a>
+                                </li>
+                            <?php endif; ?>
+                            
+                            <?php if ($current_page < $total_pages): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="<?= base_url('admin/pesanan?page=' . ($current_page + 1) . '&filter=' . $current_filter . '&status=' . urlencode($current_status ?? '') . '&q=' . urlencode($current_query ?? '')) ?>">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>

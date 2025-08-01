@@ -103,7 +103,7 @@
                                     <div class="col-md-6">
                                         <table class="table table-borderless">
                                             <tr>
-                                                <td><strong>ID Pesanan:</strong></td>
+                                                <td><strong>ID Customer:</strong></td>
                                                 <td>#<?= $pesanan['kode_unik'] ?></td>
                                             </tr>
                                             <tr>
@@ -250,7 +250,7 @@
                                 <div class="alert alert-info">
                                     <h6><i class="fas fa-lightbulb me-2"></i>Langkah Selanjutnya:</h6>
                                     <ol class="mb-0">
-                                        <li>Tunjukkan ID Pesanan (#<?= $pesanan['kode_unik'] ?>) ke kasir</li>
+                                        <li>Tunjukkan ID Customer (#<?= $pesanan['kode_unik'] ?>) ke kasir</li>
                                         <li>Lakukan pembayaran sesuai total yang tertera</li>
                                         <li>Tunggu pesanan Anda diproses</li>
                                         <li>Ambil pesanan sesuai metode yang dipilih</li>
@@ -262,7 +262,7 @@
                                     <ul class="mb-0">
                                         <li>Pesanan akan dibatalkan jika tidak dibayar dalam 15 menit</li>
                                         <li>Pastikan data pesanan sudah benar</li>
-                                        <li>Simpan ID Pesanan untuk referensi</li>
+                                        <li>Simpan ID Customer untuk referensi</li>
                                     </ul>
                                 </div>
 

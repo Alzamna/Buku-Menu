@@ -305,27 +305,23 @@ class Admin extends BaseController
     {
         $restoranId = session()->get('restoran_id');
         $query = $this->request->getGet('q');
+        $filter = $this->request->getGet('filter') ?? 'terbaru';
+        $status = $this->request->getGet('status') ?? '';
+        $page = $this->request->getGet('page') ?? 1;
+        $perPage = 15;
 
-        if ($query) {
-            $pesanan_list = $this->pesananModel
-                ->where('restoran_id', $restoranId)
-                ->groupStart()
-                ->like('id', $query)
-                ->orLike('nama', $query)
-                ->orLike('kode_unik', $query)
-                ->orLike('metode', $query)
-                ->orLike('status', $query)
-                ->groupEnd()
-                ->findAll();
-        } else {
-            $pesanan_list = $this->pesananModel
-                ->where('restoran_id', $restoranId)
-                ->findAll();
-        }
+        // Get paginated data using the model method
+        $result = $this->pesananModel->getPesananWithPagination($restoranId, $query, $filter, $status, $page, $perPage);
 
         $data = [
             'title' => 'Kelola Pesanan',
-            'pesanan_list' => $pesanan_list
+            'pesanan_list' => $result['data'],
+            'current_page' => $result['current_page'],
+            'total_pages' => $result['total_pages'],
+            'total_records' => $result['total'],
+            'current_filter' => $filter,
+            'current_status' => $status,
+            'current_query' => $query
         ];
 
         return view('admin/pesanan/index', $data);
