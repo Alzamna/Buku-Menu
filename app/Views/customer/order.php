@@ -119,7 +119,7 @@
                                         <table class="table table-borderless">
                                             <tr>
                                                 <td><strong>ID Pesanan:</strong></td>
-                                                <td>#<?= $pesanan['id'] ?></td>
+                                                <td>#<?= $pesanan['kode_unik'] ?></td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Restoran:</strong></td>
@@ -168,7 +168,7 @@
                                 </div>
                             </div>
                         </div>
-                        <?php if (!empty($pesanan['nama']) || !empty($pesanan['telepon']) ): ?>
+                        <?php if (!empty($pesanan['nama']) || !empty($pesanan['telepon'])): ?>
                             <div class="px-4 pt-3">
                                 <div class="card shadow mb-4">
                                     <div class="card-header bg-light">
@@ -179,7 +179,7 @@
                                     <div class="card-body">
                                         <p><strong>Nama:</strong> <?= esc($pesanan['nama']) ?></p>
                                         <p><strong>No HP:</strong> <?= esc($pesanan['telepon']) ?></p>
-                                   
+
                                     </div>
                                 </div>
                             </div>
@@ -246,7 +246,7 @@
                                 <div class="alert alert-info">
                                     <h6><i class="fas fa-lightbulb me-2"></i>Langkah Selanjutnya:</h6>
                                     <ol class="mb-0">
-                                        <li>Tunjukkan ID Pesanan (#<?= $pesanan['id'] ?>) ke kasir</li>
+                                        <li>Tunjukkan ID Pesanan (#<?= $pesanan['kode_unik'] ?>) ke kasir</li>
                                         <li>Lakukan pembayaran sesuai total yang tertera</li>
                                         <li>Tunggu pesanan Anda diproses</li>
                                         <li>Ambil pesanan sesuai metode yang dipilih</li>
