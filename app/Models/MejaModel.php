@@ -23,7 +23,7 @@ class MejaModel extends Model
     // Validation
     protected $validationRules = [
         'restoran_id' => 'required|integer|is_not_unique[restoran.id]',
-        'nomor_meja' => 'required|integer|greater_than[0]',
+        'nomor_meja' => 'required|min_length[1]|max_length[50]',
         'status' => 'required|in_list[aktif,nonaktif]',
     ];
 
@@ -35,8 +35,8 @@ class MejaModel extends Model
         ],
         'nomor_meja' => [
             'required' => 'Nomor meja harus diisi',
-            'integer' => 'Nomor meja harus berupa angka',
-            'greater_than' => 'Nomor meja harus lebih dari 0',
+            'min_length' => 'Nomor meja minimal 1 karakter',
+            'max_length' => 'Nomor meja maksimal 50 karakter',
         ],
         'status' => [
             'required' => 'Status harus dipilih',
