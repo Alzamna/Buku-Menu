@@ -313,10 +313,14 @@ class Admin extends BaseController
                 ->like('id', $query)
                 ->orLike('nama', $query)
                 ->orLike('kode_unik', $query)
+                ->orLike('metode', $query)
+                ->orLike('status', $query)
                 ->groupEnd()
                 ->findAll();
         } else {
-            $pesanan_list = $this->pesananModel->getPesananByRestoran($restoranId);
+            $pesanan_list = $this->pesananModel
+                ->where('restoran_id', $restoranId)
+                ->findAll();
         }
 
         $data = [
@@ -326,7 +330,6 @@ class Admin extends BaseController
 
         return view('admin/pesanan/index', $data);
     }
-
 
     public function pesananDetail($id)
     {
