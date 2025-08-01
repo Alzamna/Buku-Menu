@@ -59,6 +59,32 @@
                             
                             <div class="col-md-6">
                                 <div class="mb-3">
+                                    <label for="status" class="form-label">
+                                        <i class="fas fa-toggle-on me-2"></i>Status <span class="text-danger">*</span>
+                                    </label>
+                                    <select class="form-control <?= session()->getFlashdata('errors.status') ? 'is-invalid' : '' ?>" 
+                                            id="status" 
+                                            name="status" 
+                                            required>
+                                        <option value="">Pilih Status</option>
+                                        <option value="aktif" <?= old('status') == 'aktif' ? 'selected' : '' ?>>Aktif</option>
+                                        <option value="nonaktif" <?= old('status') == 'nonaktif' ? 'selected' : '' ?>>Nonaktif</option>
+                                    </select>
+                                    <?php if (session()->getFlashdata('errors.status')): ?>
+                                        <div class="invalid-feedback">
+                                            <?= session()->getFlashdata('errors.status') ?>
+                                        </div>
+                                    <?php endif; ?>
+                                    <div class="form-text">
+                                        Status meja (aktif/nonaktif)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
                                     <label for="keterangan" class="form-label">
                                         <i class="fas fa-info-circle me-2"></i>Keterangan
                                     </label>

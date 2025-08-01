@@ -50,7 +50,7 @@ class MejaController extends BaseController
         $restoranId = session()->get('restoran_id');
 
         $rules = [
-            'nomor_meja' => 'required|integer|greater_than[0]',
+            'nomor_meja' => 'required|min_length[1]|max_length[50]',
             'status' => 'required|in_list[aktif,nonaktif]',
         ];
 
@@ -87,7 +87,12 @@ class MejaController extends BaseController
                 session()->setFlashdata('error', 'Gagal menambahkan meja!');
             }
         } else {
-            session()->setFlashdata('error', 'Validasi gagal!');
+            // Set error messages for each field
+            $errors = $this->validator->getErrors();
+            foreach ($errors as $field => $error) {
+                session()->setFlashdata('errors.' . $field, $error);
+            }
+            session()->setFlashdata('error', 'Validasi gagal! Silakan periksa kembali data yang dimasukkan.');
         }
 
         return redirect()->back()->withInput();
@@ -124,7 +129,7 @@ class MejaController extends BaseController
         }
 
         $rules = [
-            'nomor_meja' => 'required|integer|greater_than[0]',
+            'nomor_meja' => 'required|min_length[1]|max_length[50]',
             'status' => 'required|in_list[aktif,nonaktif]',
         ];
 
@@ -142,7 +147,12 @@ class MejaController extends BaseController
                 session()->setFlashdata('error', 'Gagal mengupdate meja!');
             }
         } else {
-            session()->setFlashdata('error', 'Validasi gagal!');
+            // Set error messages for each field
+            $errors = $this->validator->getErrors();
+            foreach ($errors as $field => $error) {
+                session()->setFlashdata('errors.' . $field, $error);
+            }
+            session()->setFlashdata('error', 'Validasi gagal! Silakan periksa kembali data yang dimasukkan.');
         }
 
         return redirect()->back()->withInput();

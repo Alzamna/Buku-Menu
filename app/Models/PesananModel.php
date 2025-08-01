@@ -12,7 +12,9 @@ class PesananModel extends Model
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
-    protected $allowedFields = ['kode_unik','restoran_id', 'metode', 'total', 'waktu_pesan', 'status', 'nama', 'telepon'];
+
+    protected $allowedFields = ['restoran_id', 'metode', 'total', 'waktu_pesan', 'status', 'nama', 'telepon', 'meja', 'catatan_pesanan', 'kode_unik',];
+
 
     // Dates
     protected $useTimestamps = true;
