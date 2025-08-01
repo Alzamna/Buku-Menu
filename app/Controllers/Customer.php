@@ -259,9 +259,8 @@ class Customer extends BaseController
             $pesananData = [
                 'restoran_id' => $restoranId,
                 'nama' => $nama,
-                'nomor_hp' => $nomorHp,
-                'nomor_meja' => $nomorMeja,
-                'catatan_pesanan' => null,
+                'telepon' => $nomorHp,
+                'meja' => $nomorMeja,
                 'metode' => $metode,
                 'total' => $total,
                 'waktu_pesan' => date('Y-m-d H:i:s'),
