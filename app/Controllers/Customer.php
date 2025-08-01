@@ -32,9 +32,7 @@ class Customer extends BaseController
         if (!$restoran) {
             return redirect()->to('/')->with('error', 'Restoran tidak ditemukan!');
         }
-        // Simpan URL asal scan QR ke session (untuk "Pesan Lagi")
-        $redirectUrl = base_url("customer/menu/{$restoranUuid}" . ($mejaUuid ? "/{$mejaUuid}" : ""));
-        session()->set('last_menu_url', $redirectUrl);
+
         // Store restaurant ID in session for checkout
         session()->set('restoran_id', $restoran['id']);
 
@@ -257,7 +255,7 @@ class Customer extends BaseController
             }
 
             $kodeUnik = bin2hex(random_bytes(4)); // e.g., a1b2c3d4
-
+            date_default_timezone_set('Asia/Jakarta');
             $pesananData = [
                 'restoran_id' => $restoranId,
                 'nama' => $nama,
@@ -270,6 +268,15 @@ class Customer extends BaseController
                 'kode_unik' => $kodeUnik,
                 'telepon' => $identitas['telepon']
             ];
+
+            // Store restaurant and table info for completion page
+            $restoran = $this->restoranModel->find($restoranId);
+            session()->set('completion_restoran_uuid', $restoran['uuid']);
+            if ($mejaId) {
+                $mejaModel = new \App\Models\MejaModel();
+                $meja = $mejaModel->find($mejaId);
+                session()->set('completion_meja_uuid', $meja['uuid']);
+            }
 
             $pesananId = $this->pesananModel->insert($pesananData);
 
@@ -316,11 +323,13 @@ class Customer extends BaseController
         }
 
         $detailList = $this->pesananDetailModel->getDetailByPesanan($pesanan['id']);
+        $restoran = $this->restoranModel->find($pesanan['restoran_id']);
 
         $data = [
             'title' => 'Pesanan Selesai',
             'pesanan' => $pesanan,
             'detail_list' => $detailList,
+            'restoran' => $restoran,
         ];
 
         return view('customer/completion', $data);
@@ -354,6 +363,15 @@ class Customer extends BaseController
         session()->remove('cart');
         session()->setFlashdata('success', 'Keranjang berhasil dikosongkan!');
         return redirect()->to('/');
+    }
+
+    public function cleanupCompletionSession()
+    {
+        // Clean up session data after completion page is shown
+        session()->remove('completion_restoran_uuid');
+        session()->remove('completion_meja_uuid');
+        
+        return $this->response->setJSON(['success' => true]);
     }
 
 }

@@ -11,11 +11,8 @@
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-        }
-
-        .navbar {
-            background: rgba(255, 255, 255, 0.95) !important;
-            backdrop-filter: blur(10px);
+            margin: 0;
+            padding: 0;
         }
 
         .completion-container {
@@ -24,6 +21,7 @@
             border-radius: 20px;
             margin-top: 20px;
             margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         .completion-header {
@@ -36,6 +34,30 @@
 
         .success-animation {
             animation: bounce 2s infinite;
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn {
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         @keyframes bounce {
@@ -129,28 +151,21 @@
 </head>
 
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-check-circle me-2"></i>Pesanan Selesai
-            </a>
-
-            <div class="navbar-nav ms-auto">
-                <a href="<?= base_url('/') ?>" class="btn btn-outline-primary">
-                    <i class="fas fa-home me-2"></i>Beranda
-                </a>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container" style="margin-top: 100px;">
+    <div class="container" style="margin-top: 20px;">
         <!-- Completion Header -->
-        <div class="completion-container">
+        <div class="completion-container fade-in">
             <div class="completion-header">
                 <i class="fas fa-check-circle fa-4x mb-3 success-animation"></i>
                 <h2 class="mb-2">Pesanan Berhasil!</h2>
-                <p class="mb-0">Pesanan selesai, silahkan tunggu</p>
+                <p class="mb-0">Pesanan Anda telah diterima dan sedang diproses</p>
+                <?php if (isset($restoran)): ?>
+                    <p class="mb-0 mt-2">
+                        <i class="fas fa-store me-2"></i><?= esc($restoran['nama']) ?>
+                    </p>
+                    <p class="mb-0 mt-1 text-white-50">
+                        <small>Nomor pesanan: #<?= $pesanan['kode_unik'] ?></small>
+                    </p>
+                <?php endif; ?>
             </div>
 
             <div class="p-4">
@@ -308,20 +323,63 @@
 
                 <!-- Action Buttons -->
                 <div class="text-center mt-4">
-                    <a href="<?= base_url('/') ?>" class="btn btn-primary btn-lg me-3">
-                        <i class="fas fa-home me-2"></i>Kembali ke Beranda
+                    <?php 
+                    $restoranUuid = session()->get('completion_restoran_uuid');
+                    $mejaUuid = session()->get('completion_meja_uuid');
+                    
+                    // If session data is not available, try to get from pesanan data
+                    if (!$restoranUuid && isset($restoran)) {
+                        $restoranUuid = $restoran['uuid'];
+                    }
+                    
+                    // If meja info is not available in session, try to get from pesanan data
+                    if (!$mejaUuid && isset($pesanan['meja']) && $pesanan['meja']) {
+                        // Try to find meja by nomor_meja
+                        $mejaModel = new \App\Models\MejaModel();
+                        $meja = $mejaModel->where('restoran_id', $pesanan['restoran_id'])
+                                         ->where('nomor_meja', $pesanan['meja'])
+                                         ->first();
+                        if ($meja) {
+                            $mejaUuid = $meja['uuid'];
+                        }
+                    }
+                    
+                    if ($restoranUuid) {
+                        $menuUrl = base_url("customer/menu/{$restoranUuid}");
+                        if ($mejaUuid) {
+                            $menuUrl = base_url("customer/menu/{$restoranUuid}/meja/{$mejaUuid}");
+                        }
+                    } else {
+                        $menuUrl = base_url('/');
+                    }
+                    ?>
+                    <a href="<?= $menuUrl ?>" class="btn btn-primary btn-lg me-3" style="border-radius: 25px; padding: 12px 30px;">
+                        <i class="fas fa-utensils me-2"></i>Kembali ke Menu
                     </a>
                     <a href="<?= base_url("customer/order/{$pesanan['kode_unik']}") ?>"
-                        class="btn btn-outline-primary btn-lg">
+                        class="btn btn-outline-primary btn-lg" style="border-radius: 25px; padding: 12px 30px;">
                         <i class="fas fa-eye me-2"></i>Lihat Detail
                     </a>
-
                 </div>
             </div>
         </div>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Clean up session data after page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Send request to clean up session data
+            fetch('<?= base_url('customer/cleanup-completion-session') ?>', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -84,7 +84,12 @@ class SuperAdmin extends BaseController
                     session()->setFlashdata('error', 'Gagal menambahkan restoran!');
                 }
             } else {
-                session()->setFlashdata('error', 'Validasi gagal!');
+                // Set error messages for each field
+                $errors = $this->validator->getErrors();
+                foreach ($errors as $field => $error) {
+                    session()->setFlashdata('errors.' . $field, $error);
+                }
+                session()->setFlashdata('error', 'Validasi gagal! Silakan periksa kembali data yang dimasukkan.');
             }
         }
 
@@ -125,7 +130,12 @@ class SuperAdmin extends BaseController
                     session()->setFlashdata('error', 'Gagal mengupdate restoran!');
                 }
             } else {
-                session()->setFlashdata('error', 'Validasi gagal!');
+                // Set error messages for each field
+                $errors = $this->validator->getErrors();
+                foreach ($errors as $field => $error) {
+                    session()->setFlashdata('errors.' . $field, $error);
+                }
+                session()->setFlashdata('error', 'Validasi gagal! Silakan periksa kembali data yang dimasukkan.');
             }
         }
 

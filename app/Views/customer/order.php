@@ -79,21 +79,6 @@
 </head>
 
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-check-circle me-2"></i>Pesanan Berhasil
-            </a>
-
-            <div class="navbar-nav ms-auto">
-                <a href="<?= base_url() ?>" class="btn btn-outline-primary">
-                    <i class="fas fa-home me-2"></i>Beranda
-                </a>
-            </div>
-        </div>
-    </nav>
-
     <div class="container" style="margin-top: 100px;">
         <!-- Order Success Header -->
         <div class="order-container">
@@ -191,18 +176,15 @@
                             </div>
                         </div>
                         <?php if (!empty($pesanan['nama']) || !empty($pesanan['telepon'])): ?>
-                            <div class="px-4 pt-3">
-                                <div class="card shadow mb-4">
-                                    <div class="card-header bg-light">
-                                        <h6 class="m-0 font-weight-bold text-primary">
-                                            <i class="fas fa-user me-2"></i>Informasi Pelanggan
-                                        </h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <p><strong>Nama:</strong> <?= esc($pesanan['nama']) ?></p>
-                                        <p><strong>No HP:</strong> <?= esc($pesanan['telepon']) ?></p>
-
-                                    </div>
+                            <div class="card shadow mb-4">
+                                <div class="card-header bg-light">
+                                    <h6 class="m-0 font-weight-bold text-primary">
+                                        <i class="fas fa-user me-2"></i>Informasi Pelanggan
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Nama:</strong> <?= esc($pesanan['nama']) ?></p>
+                                    <p><strong>No HP:</strong> <?= esc($pesanan['telepon']) ?></p>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -285,10 +267,9 @@
                                 </div>
 
                                 <div class="d-grid gap-2">
-                                    <a href="<?= session('last_menu_url') ?? base_url() ?>" class="btn btn-primary">
+                                    <a href="<?= base_url() ?>" class="btn btn-primary">
                                         <i class="fas fa-utensils me-2"></i>Pesan Lagi
                                     </a>
-
                                     <a href="<?= base_url('customer/clear-cart') ?>" class="btn btn-outline-secondary">
                                         <i class="fas fa-trash me-2"></i>Kosongkan Keranjang
                                     </a>

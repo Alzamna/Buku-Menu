@@ -77,6 +77,7 @@ $routes->get('customer/completion/(:alphanum)', 'Customer::completion/$1');
 $routes->get('customer/order/(:alphanum)', 'Customer::order/$1');
 
 $routes->get('customer/clear-cart', 'Customer::clearCart');
+$routes->post('customer/cleanup-completion-session', 'Customer::cleanupCompletionSession');
 
 
 $routes->get('customer/menu/(:segment)/(:segment)', 'Customer::menu/$1/$2');

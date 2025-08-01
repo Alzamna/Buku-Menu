@@ -12,6 +12,15 @@
         </a>
     </div>
 
+    <!-- Alert messages -->
+    <?php if (session()->getFlashdata('error')): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <?= session()->getFlashdata('error') ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <?php endif; ?>
+
     <!-- Form -->
     <div class="card shadow">
         <div class="card-header py-3">
@@ -28,10 +37,10 @@
                             <label for="nama" class="form-label">
                                 <i class="fas fa-store me-2"></i>Nama Restoran <span class="text-danger">*</span>
                             </label>
-                            <input type="text" class="form-control <?= session('errors.nama') ? 'is-invalid' : '' ?>"
+                            <input type="text" class="form-control <?= session()->getFlashdata('errors.nama') ? 'is-invalid' : '' ?>"
                                 id="nama" name="nama" value="<?= old('nama') ?>" required>
-                            <?php if (session('errors.nama')): ?>
-                                <div class="invalid-feedback"><?= session('errors.nama') ?></div>
+                            <?php if (session()->getFlashdata('errors.nama')): ?>
+                                <div class="invalid-feedback"><?= session()->getFlashdata('errors.nama') ?></div>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -41,10 +50,10 @@
                             <label for="kontak" class="form-label">
                                 <i class="fas fa-phone me-2"></i>Kontak <span class="text-danger">*</span>
                             </label>
-                            <input type="text" class="form-control <?= session('errors.kontak') ? 'is-invalid' : '' ?>"
+                            <input type="text" class="form-control <?= session()->getFlashdata('errors.kontak') ? 'is-invalid' : '' ?>"
                                 id="kontak" name="kontak" value="<?= old('kontak') ?>" required>
-                            <?php if (session('errors.kontak')): ?>
-                                <div class="invalid-feedback"><?= session('errors.kontak') ?></div>
+                            <?php if (session()->getFlashdata('errors.kontak')): ?>
+                                <div class="invalid-feedback"><?= session()->getFlashdata('errors.kontak') ?></div>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -54,10 +63,10 @@
                     <label for="alamat" class="form-label">
                         <i class="fas fa-map-marker-alt me-2"></i>Alamat <span class="text-danger">*</span>
                     </label>
-                    <textarea class="form-control <?= session('errors.alamat') ? 'is-invalid' : '' ?>" id="alamat"
+                    <textarea class="form-control <?= session()->getFlashdata('errors.alamat') ? 'is-invalid' : '' ?>" id="alamat"
                         name="alamat" rows="3" required><?= old('alamat') ?></textarea>
-                    <?php if (session('errors.alamat')): ?>
-                        <div class="invalid-feedback"><?= session('errors.alamat') ?></div>
+                    <?php if (session()->getFlashdata('errors.alamat')): ?>
+                        <div class="invalid-feedback"><?= session()->getFlashdata('errors.alamat') ?></div>
                     <?php endif; ?>
                 </div>
 

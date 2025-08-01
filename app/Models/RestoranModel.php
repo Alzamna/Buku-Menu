@@ -44,7 +44,7 @@ class RestoranModel extends Model
         ],
     ];
 
-    protected $skipValidation = false;
+    protected $skipValidation = true;
     protected $cleanValidationRules = true;
 
     public function findByUuid($uuid)
