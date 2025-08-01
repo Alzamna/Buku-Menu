@@ -12,7 +12,9 @@ class PesananModel extends Model
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
-    protected $allowedFields = ['restoran_id', 'metode', 'total', 'waktu_pesan', 'status', 'nama', 'telepon', 'meja', 'catatan_pesanan'];
+
+    protected $allowedFields = ['restoran_id', 'metode', 'total', 'waktu_pesan', 'status', 'nama', 'telepon', 'meja', 'catatan_pesanan', 'kode_unik',];
+
 
     // Dates
     protected $useTimestamps = true;
@@ -84,4 +86,12 @@ class PesananModel extends Model
     {
         return $this->update($pesananId, ['status' => $status]);
     }
+    public function getPesananWithDetailsByKodeUnik($kodeUnik)
+    {
+        return $this->select('pesanan.*, restoran.nama as nama_restoran')
+            ->join('restoran', 'restoran.id = pesanan.restoran_id')
+            ->where('pesanan.kode_unik', $kodeUnik)
+            ->first();
+    }
+
 }

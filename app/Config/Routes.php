@@ -1,5 +1,5 @@
 <?php
-
+ 
 use CodeIgniter\Router\RouteCollection;
 
 /**
@@ -73,9 +73,11 @@ $routes->get('customer/identity', 'Customer::identityForm');
 $routes->post('customer/submit-identitas', 'Customer::submitIdentitas');
 $routes->get('customer/checkout', 'Customer::checkout');
 $routes->post('customer/checkout', 'Customer::checkout');
-$routes->get('customer/completion/(:num)', 'Customer::completion/$1');
-$routes->get('customer/order/(:num)', 'Customer::order/$1');
+$routes->get('customer/completion/(:alphanum)', 'Customer::completion/$1');
+$routes->get('customer/order/(:alphanum)', 'Customer::order/$1');
+
 $routes->get('customer/clear-cart', 'Customer::clearCart');
 
 // QR Code Routes
 $routes->get('qrcode/generate/(:segment)', 'QRCodeController::generate/$1');
+$routes->get('qrcode/download-meja/(:segment)/(:segment)', 'QrCodeController::downloadMeja/$1/$2');

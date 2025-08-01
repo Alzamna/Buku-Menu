@@ -39,12 +39,19 @@
         }
 
         @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
                 transform: translateY(0);
             }
+
             40% {
                 transform: translateY(-10px);
             }
+
             60% {
                 transform: translateY(-5px);
             }
@@ -160,7 +167,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <p><strong>Nomor Pesanan:</strong></p>
-                                        <h5 class="text-primary">#<?= $pesanan['id'] ?></h5>
+                                        <h5 class="text-primary">#<?= $pesanan['kode_unik'] ?></h5>
                                     </div>
                                     <div class="col-md-6">
                                         <p><strong>Status:</strong></p>
@@ -200,22 +207,22 @@
                                         <div class="row align-items-center">
                                             <div class="col-md-8">
                                                 <h6 class="mb-1"><?= esc($detail['nama_menu']) ?></h6>
-                                                                                                 <p class="text-muted mb-0">
-                                                     Jumlah: <?= $detail['jumlah'] ?> x Rp
-                                                     <?= number_format($detail['harga_satuan'], 0, ',', '.') ?>
-                                                 </p>
+                                                <p class="text-muted mb-0">
+                                                    Jumlah: <?= $detail['jumlah'] ?> x Rp
+                                                    <?= number_format($detail['harga_satuan'], 0, ',', '.') ?>
+                                                </p>
                                                 <?php if ($detail['catatan']): ?>
                                                     <small class="text-info">
                                                         <i class="fas fa-sticky-note me-1"></i><?= esc($detail['catatan']) ?>
                                                     </small>
                                                 <?php endif; ?>
                                             </div>
-                                                                                         <div class="col-md-4 text-end">
-                                                 <p class="text-success mb-0">
-                                                     <strong>Rp
-                                                         <?= number_format($detail['subtotal'], 0, ',', '.') ?></strong>
-                                                 </p>
-                                             </div>
+                                            <div class="col-md-4 text-end">
+                                                <p class="text-success mb-0">
+                                                    <strong>Rp
+                                                        <?= number_format($detail['subtotal'], 0, ',', '.') ?></strong>
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 <?php endforeach; ?>
@@ -304,9 +311,11 @@
                     <a href="<?= base_url('/') ?>" class="btn btn-primary btn-lg me-3">
                         <i class="fas fa-home me-2"></i>Kembali ke Beranda
                     </a>
-                    <a href="<?= base_url("customer/order/{$pesanan['id']}") ?>" class="btn btn-outline-primary btn-lg">
+                    <a href="<?= base_url("customer/order/{$pesanan['kode_unik']}") ?>"
+                        class="btn btn-outline-primary btn-lg">
                         <i class="fas fa-eye me-2"></i>Lihat Detail
                     </a>
+
                 </div>
             </div>
         </div>
@@ -315,4 +324,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
-</html> 
+</html>

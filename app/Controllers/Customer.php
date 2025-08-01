@@ -207,7 +207,7 @@ class Customer extends BaseController
         $identitas = [
             'nama' => $this->request->getPost('nama'),
             'telepon' => $this->request->getPost('telepon'),
-        
+
         ];
         session()->set('identitas', $identitas);
         return redirect()->to('/customer/checkout');
@@ -218,7 +218,6 @@ class Customer extends BaseController
     {
         $cart = session()->get('cart') ?? [];
         $identitas = session()->get('identitas') ?? [];
-
 
         if (empty($cart)) {
             return redirect()->to('/')->with('error', 'Keranjang kosong!');
@@ -242,11 +241,11 @@ class Customer extends BaseController
                 $total += $item['harga'] * $item['jumlah'];
             }
 
-            // Get customer info from session (already collected previously)
+            // Get customer info from session
             $nama = $identitas['nama'] ?? '';
             $nomorHp = $identitas['telepon'] ?? '';
-            
-            // Get table number from meja session
+
+            // Get meja info (if any)
             $mejaId = session()->get('meja_id');
             $nomorMeja = null;
             if ($mejaId) {
@@ -255,7 +254,8 @@ class Customer extends BaseController
                 $nomorMeja = $meja ? $meja['nomor_meja'] : null;
             }
 
-            // Create order
+            $kodeUnik = bin2hex(random_bytes(4)); // e.g., a1b2c3d4
+            date_default_timezone_set('Asia/Jakarta');
             $pesananData = [
                 'restoran_id' => $restoranId,
                 'nama' => $nama,
@@ -264,27 +264,29 @@ class Customer extends BaseController
                 'metode' => $metode,
                 'total' => $total,
                 'waktu_pesan' => date('Y-m-d H:i:s'),
+<<<<<<< HEAD
                 'status' => 'pending', // New orders should start with 'pending' status
+=======
+                'status' => 'confirmed',
+                'kode_unik' => $kodeUnik,
+                'telepon' => $identitas['telepon']
+>>>>>>> cb59d5505091bfe73906e3007e17bd5a2d224856
             ];
 
             $pesananId = $this->pesananModel->insert($pesananData);
 
             if ($pesananId) {
-                // Create order details
                 $this->pesananDetailModel->createDetailFromCart($pesananId, $cart);
 
-                // Update stock
                 foreach ($cart as $item) {
                     $this->menuModel->updateStok($item['menu_id'], $item['jumlah']);
                 }
 
-                // Clear cart
                 session()->remove('cart');
-                // Clear identitas session
                 session()->remove('identitas');
 
                 session()->setFlashdata('success', 'Pesanan berhasil dibuat!');
-                return redirect()->to("/customer/completion/{$pesananId}");
+                return redirect()->to("/customer/completion/{$kodeUnik}");
             } else {
                 session()->setFlashdata('error', 'Gagal membuat pesanan!');
                 return redirect()->back();
@@ -306,15 +308,16 @@ class Customer extends BaseController
         return view('customer/checkout', $data);
     }
 
-    public function completion($pesananId)
+
+    public function completion($kodeUnik)
     {
-        $pesanan = $this->pesananModel->getPesananWithDetails($pesananId);
-        
+        $pesanan = $this->pesananModel->where('kode_unik', $kodeUnik)->first();
+
         if (!$pesanan) {
             return redirect()->to('/')->with('error', 'Pesanan tidak ditemukan!');
         }
 
-        $detailList = $this->pesananDetailModel->getDetailByPesanan($pesananId);
+        $detailList = $this->pesananDetailModel->getDetailByPesanan($pesanan['id']);
 
         $data = [
             'title' => 'Pesanan Selesai',
@@ -325,15 +328,16 @@ class Customer extends BaseController
         return view('customer/completion', $data);
     }
 
-    public function order($pesananId)
+
+    public function order($kodeUnik)
     {
-        $pesanan = $this->pesananModel->getPesananWithDetails($pesananId);
+        $pesanan = $this->pesananModel->where('kode_unik', $kodeUnik)->first();
 
         if (!$pesanan) {
             return redirect()->to('/')->with('error', 'Pesanan tidak ditemukan!');
         }
 
-        $detailList = $this->pesananDetailModel->getDetailByPesanan($pesananId);
+        $detailList = $this->pesananDetailModel->getDetailByPesanan($pesanan['id']);
         $restoran = $this->restoranModel->find($pesanan['restoran_id']);
 
         $data = [
@@ -341,11 +345,11 @@ class Customer extends BaseController
             'pesanan' => $pesanan,
             'detail_list' => $detailList,
             'restoran' => $restoran,
-            
         ];
 
         return view('customer/order', $data);
     }
+
 
     public function clearCart()
     {
