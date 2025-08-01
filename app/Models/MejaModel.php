@@ -12,7 +12,7 @@ class MejaModel extends Model
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
-    protected $allowedFields = ['restoran_id', 'nomor_meja', 'keterangan', 'status'];
+    protected $allowedFields = ['restoran_id', 'nomor_meja', 'keterangan', 'status', 'uuid'];
 
     // Dates
     protected $useTimestamps = true;
@@ -22,51 +22,49 @@ class MejaModel extends Model
 
     // Validation
     protected $validationRules = [
-        'restoran_id' => 'required|integer',
-        'nomor_meja' => 'required|max_length[50]',
+        'restoran_id' => 'required|integer|is_not_unique[restoran.id]',
+        'nomor_meja' => 'required|integer|greater_than[0]',
         'status' => 'required|in_list[aktif,nonaktif]',
     ];
+
     protected $validationMessages = [
         'restoran_id' => [
-            'required' => 'ID Restoran harus diisi',
-            'integer' => 'ID Restoran harus berupa angka',
+            'required' => 'Restoran harus dipilih',
+            'integer' => 'ID Restoran tidak valid',
+            'is_not_unique' => 'Restoran tidak ditemukan',
         ],
         'nomor_meja' => [
             'required' => 'Nomor meja harus diisi',
-            'max_length' => 'Nomor meja maksimal 50 karakter',
+            'integer' => 'Nomor meja harus berupa angka',
+            'greater_than' => 'Nomor meja harus lebih dari 0',
         ],
         'status' => [
-            'required' => 'Status harus diisi',
-            'in_list' => 'Status harus aktif atau nonaktif',
+            'required' => 'Status harus dipilih',
+            'in_list' => 'Status tidak valid',
         ],
     ];
+
     protected $skipValidation = false;
     protected $cleanValidationRules = true;
 
-    // Callbacks
-    protected $allowCallbacks = true;
-    protected $beforeInsert = [];
-    protected $afterInsert = [];
-    protected $beforeUpdate = [];
-    protected $afterUpdate = [];
-    protected $beforeFind = [];
-    protected $afterFind = [];
-    protected $beforeDelete = [];
-    protected $afterDelete = [];
+    public function findByUuid($uuid)
+    {
+        return $this->where('uuid', $uuid)->first();
+    }
 
     public function getMejaByRestoran($restoranId)
     {
         return $this->where('restoran_id', $restoranId)
-                    ->where('status', 'aktif')
                     ->orderBy('nomor_meja', 'ASC')
                     ->findAll();
     }
 
-    public function getMejaWithRestoran($mejaId)
+    public function getMejaByRestoranUuid($restoranUuid)
     {
-        return $this->select('meja.*, restoran.nama as nama_restoran')
+        return $this->select('meja.*')
                     ->join('restoran', 'restoran.id = meja.restoran_id')
-                    ->where('meja.id', $mejaId)
-                    ->first();
+                    ->where('restoran.uuid', $restoranUuid)
+                    ->orderBy('meja.nomor_meja', 'ASC')
+                    ->findAll();
     }
 } 

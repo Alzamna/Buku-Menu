@@ -21,22 +21,51 @@ class QRCodeController extends BaseController
     public function index()
     {
         $restoranId = session()->get('restoran_id');
-        return redirect()->to("admin/qrcode/display/{$restoranId}");
+        $restoran = $this->restoranModel->find($restoranId);
+        
+        if (!$restoran) {
+            return redirect()->back()->with('error', 'Restoran tidak ditemukan!');
+        }
+        
+        // Generate UUID if it doesn't exist
+        if (empty($restoran['uuid'])) {
+            helper('uuid');
+            if (!function_exists('generate_secure_uuid')) {
+                // Fallback to simple UUID generation
+                $uuid = sprintf(
+                    '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+                    mt_rand(0, 0xffff),
+                    mt_rand(0, 0xffff),
+                    mt_rand(0, 0xffff),
+                    mt_rand(0, 0x0fff) | 0x4000,
+                    mt_rand(0, 0x3fff) | 0x8000,
+                    mt_rand(0, 0xffff),
+                    mt_rand(0, 0xffff),
+                    mt_rand(0, 0xffff)
+                );
+            } else {
+                $uuid = \generate_secure_uuid();
+            }
+            $this->restoranModel->update($restoranId, ['uuid' => $uuid]);
+            $restoran['uuid'] = $uuid;
+        }
+        
+        return redirect()->to("admin/qrcode/display/{$restoran['uuid']}");
     }
 
-    public function generate($restoranId, $mejaId = null)
+    public function generate($restoranUuid, $mejaUuid = null)
     {
-        $restoran = $this->restoranModel->find($restoranId);
+        $restoran = $this->restoranModel->findByUuid($restoranUuid);
         
         if (!$restoran) {
             return $this->response->setJSON(['error' => 'Restoran tidak ditemukan']);
         }
 
         // Generate menu URL with meja parameter
-        if ($mejaId) {
-            $menuUrl = base_url("customer/menu/{$restoranId}/meja/{$mejaId}");
+        if ($mejaUuid) {
+            $menuUrl = base_url("customer/menu/{$restoranUuid}/meja/{$mejaUuid}");
         } else {
-            $menuUrl = base_url("customer/menu/{$restoranId}");
+            $menuUrl = base_url("customer/menu/{$restoranUuid}");
         }
 
         // Create QR Code
@@ -54,27 +83,27 @@ class QRCodeController extends BaseController
             ->setBody($result->getString());
     }
 
-    public function download($restoranId, $mejaId = null)
+    public function download($restoranUuid, $mejaUuid = null)
     {
-        $restoran = $this->restoranModel->find($restoranId);
+        $restoran = $this->restoranModel->findByUuid($restoranUuid);
         
         if (!$restoran) {
             return redirect()->back()->with('error', 'Restoran tidak ditemukan!');
         }
 
         $meja = null;
-        if ($mejaId) {
-            $meja = $this->mejaModel->find($mejaId);
-            if (!$meja || $meja['restoran_id'] != $restoranId) {
+        if ($mejaUuid) {
+            $meja = $this->mejaModel->findByUuid($mejaUuid);
+            if (!$meja || $meja['restoran_id'] != $restoran['id']) {
                 return redirect()->back()->with('error', 'Meja tidak ditemukan!');
             }
         }
 
         // Generate menu URL with meja parameter
-        if ($mejaId) {
-            $menuUrl = base_url("customer/menu/{$restoranId}/meja/{$mejaId}");
+        if ($mejaUuid) {
+            $menuUrl = base_url("customer/menu/{$restoranUuid}/meja/{$mejaUuid}");
         } else {
-            $menuUrl = base_url("customer/menu/{$restoranId}");
+            $menuUrl = base_url("customer/menu/{$restoranUuid}");
         }
 
         // Create QR Code
@@ -101,16 +130,41 @@ class QRCodeController extends BaseController
             ->setBody($result->getString());
     }
 
-    public function display($restoranId)
+    public function display($restoranUuid)
     {
-        $restoran = $this->restoranModel->find($restoranId);
+        $restoran = $this->restoranModel->findByUuid($restoranUuid);
         
         if (!$restoran) {
             return redirect()->back()->with('error', 'Restoran tidak ditemukan!');
         }
 
         // Get all meja for this restoran
-        $mejaList = $this->mejaModel->getMejaByRestoran($restoranId);
+        $mejaList = $this->mejaModel->getMejaByRestoranUuid($restoranUuid);
+        
+        // Generate UUIDs for meja that don't have them
+        helper('uuid');
+        foreach ($mejaList as &$meja) {
+            if (empty($meja['uuid'])) {
+                if (!function_exists('generate_secure_uuid')) {
+                    // Fallback to simple UUID generation
+                    $uuid = sprintf(
+                        '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+                        mt_rand(0, 0xffff),
+                        mt_rand(0, 0xffff),
+                        mt_rand(0, 0xffff),
+                        mt_rand(0, 0x0fff) | 0x4000,
+                        mt_rand(0, 0x3fff) | 0x8000,
+                        mt_rand(0, 0xffff),
+                        mt_rand(0, 0xffff),
+                        mt_rand(0, 0xffff)
+                    );
+                } else {
+                    $uuid = \generate_secure_uuid();
+                }
+                $this->mejaModel->update($meja['id'], ['uuid' => $uuid]);
+                $meja['uuid'] = $uuid;
+            }
+        }
 
         $data = [
             'title' => 'QR Code Menu - ' . $restoran['nama'],
@@ -121,17 +175,17 @@ class QRCodeController extends BaseController
         return view('admin/qrcode/display', $data);
     }
 
-    public function generateMeja($restoranId, $mejaId)
+    public function generateMeja($restoranUuid, $mejaUuid)
     {
-        $restoran = $this->restoranModel->find($restoranId);
-        $meja = $this->mejaModel->find($mejaId);
+        $restoran = $this->restoranModel->findByUuid($restoranUuid);
+        $meja = $this->mejaModel->findByUuid($mejaUuid);
         
-        if (!$restoran || !$meja || $meja['restoran_id'] != $restoranId) {
+        if (!$restoran || !$meja || $meja['restoran_id'] != $restoran['id']) {
             return $this->response->setJSON(['error' => 'Data tidak ditemukan']);
         }
 
         // Generate menu URL with meja parameter
-        $menuUrl = base_url("customer/menu/{$restoranId}/meja/{$mejaId}");
+        $menuUrl = base_url("customer/menu/{$restoranUuid}/meja/{$mejaUuid}");
 
         // Create QR Code
         $qrCode = new QrCode($menuUrl);
@@ -148,17 +202,17 @@ class QRCodeController extends BaseController
             ->setBody($result->getString());
     }
 
-    public function downloadMeja($restoranId, $mejaId)
+    public function downloadMeja($restoranUuid, $mejaUuid)
     {
-        $restoran = $this->restoranModel->find($restoranId);
-        $meja = $this->mejaModel->find($mejaId);
+        $restoran = $this->restoranModel->findByUuid($restoranUuid);
+        $meja = $this->mejaModel->findByUuid($mejaUuid);
         
-        if (!$restoran || !$meja || $meja['restoran_id'] != $restoranId) {
+        if (!$restoran || !$meja || $meja['restoran_id'] != $restoran['id']) {
             return redirect()->back()->with('error', 'Data tidak ditemukan!');
         }
 
         // Generate menu URL with meja parameter
-        $menuUrl = base_url("customer/menu/{$restoranId}/meja/{$mejaId}");
+        $menuUrl = base_url("customer/menu/{$restoranUuid}/meja/{$mejaUuid}");
 
         // Create QR Code
         $qrCode = new QrCode($menuUrl);

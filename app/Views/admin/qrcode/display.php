@@ -47,7 +47,7 @@
                                         </div>
                                         <div class="card-body text-center">
                                             <div class="mb-3">
-                                                <img src="<?= base_url('admin/qrcode/generate-meja/' . $restoran['id'] . '/' . $meja['id']) ?>" 
+                                                <img src="<?= base_url('admin/qrcode/generate-meja/' . $restoran['uuid'] . '/' . $meja['uuid']) ?>" 
                                                      alt="QR Code Meja <?= $meja['nomor_meja'] ?>" 
                                                      class="img-fluid" 
                                                      style="max-width: 200px;">
@@ -55,19 +55,19 @@
                                             <div class="mb-3">
                                                 <small class="text-muted">
                                                     <i class="fas fa-link me-1"></i>
-                                                    <?= base_url('customer/menu/' . $restoran['id'] . '/meja/' . $meja['id']) ?>
+                                                    <?= base_url('customer/menu/' . $restoran['uuid'] . '/meja/' . $meja['uuid']) ?>
                                                 </small>
                                             </div>
                                             <div class="d-grid gap-2">
-                                                <a href="<?= base_url('admin/qrcode/download-meja/' . $restoran['id'] . '/' . $meja['id']) ?>" 
+                                                <a href="<?= base_url('admin/qrcode/download-meja/' . $restoran['uuid'] . '/' . $meja['uuid']) ?>" 
                                                    class="btn btn-success btn-sm">
                                                     <i class="fas fa-download me-2"></i>Download QR Code
                                                 </a>
                                                 <button class="btn btn-outline-primary btn-sm" 
-                                                        onclick="copyLink('<?= base_url('customer/menu/' . $restoran['id'] . '/meja/' . $meja['id']) ?>')">
+                                                        onclick="copyLink('<?= base_url('customer/menu/' . $restoran['uuid'] . '/meja/' . $meja['uuid']) ?>')">
                                                     <i class="fas fa-copy me-2"></i>Copy Link
                                                 </button>
-                                                <a href="<?= base_url('customer/menu/' . $restoran['id'] . '/meja/' . $meja['id']) ?>" 
+                                                <a href="<?= base_url('customer/menu/' . $restoran['uuid'] . '/meja/' . $meja['uuid']) ?>" 
                                                    target="_blank" 
                                                    class="btn btn-outline-info btn-sm">
                                                     <i class="fas fa-external-link-alt me-2"></i>Preview

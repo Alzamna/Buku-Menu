@@ -53,10 +53,28 @@ class SuperAdmin extends BaseController
             ];
 
             if ($this->validate($rules)) {
+                helper('uuid');
+                if (!function_exists('generate_secure_uuid')) {
+                    // Fallback to simple UUID generation
+                    $uuid = sprintf(
+                        '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+                        mt_rand(0, 0xffff),
+                        mt_rand(0, 0xffff),
+                        mt_rand(0, 0xffff),
+                        mt_rand(0, 0x0fff) | 0x4000,
+                        mt_rand(0, 0x3fff) | 0x8000,
+                        mt_rand(0, 0xffff),
+                        mt_rand(0, 0xffff),
+                        mt_rand(0, 0xffff)
+                    );
+                } else {
+                    $uuid = \generate_secure_uuid();
+                }
                 $data = [
                     'nama' => $this->request->getPost('nama'),
                     'alamat' => $this->request->getPost('alamat'),
                     'kontak' => $this->request->getPost('kontak'),
+                    'uuid' => $uuid,
                 ];
 
                 if ($this->restoranModel->insert($data)) {

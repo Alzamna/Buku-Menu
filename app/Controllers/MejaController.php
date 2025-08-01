@@ -19,13 +19,13 @@ class MejaController extends BaseController
     public function index()
     {
         $restoranId = session()->get('restoran_id');
-        $mejaList = $this->mejaModel->getMejaByRestoran($restoranId);
         $restoran = $this->restoranModel->find($restoranId);
+        $mejaList = $this->mejaModel->getMejaByRestoran($restoranId);
 
         $data = [
-            'title' => 'Kelola Meja - ' . $restoran['nama'],
-            'meja_list' => $mejaList,
+            'title' => 'Kelola Meja',
             'restoran' => $restoran,
+            'meja_list' => $mejaList,
         ];
 
         return view('admin/meja/index', $data);
@@ -37,8 +37,9 @@ class MejaController extends BaseController
         $restoran = $this->restoranModel->find($restoranId);
 
         $data = [
-            'title' => 'Tambah Meja - ' . $restoran['nama'],
+            'title' => 'Tambah Meja',
             'restoran' => $restoran,
+            'validation' => \Config\Services::validation()
         ];
 
         return view('admin/meja/create', $data);
@@ -47,45 +48,67 @@ class MejaController extends BaseController
     public function store()
     {
         $restoranId = session()->get('restoran_id');
-        
+
         $rules = [
-            'nomor_meja' => 'required|max_length[50]',
-            'keterangan' => 'max_length[255]',
+            'nomor_meja' => 'required|integer|greater_than[0]',
+            'status' => 'required|in_list[aktif,nonaktif]',
         ];
 
-        if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }
+        if ($this->validate($rules)) {
+            helper('uuid');
+            if (!function_exists('generate_secure_uuid')) {
+                // Fallback to simple UUID generation
+                $uuid = sprintf(
+                    '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+                    mt_rand(0, 0xffff),
+                    mt_rand(0, 0xffff),
+                    mt_rand(0, 0xffff),
+                    mt_rand(0, 0x0fff) | 0x4000,
+                    mt_rand(0, 0x3fff) | 0x8000,
+                    mt_rand(0, 0xffff),
+                    mt_rand(0, 0xffff),
+                    mt_rand(0, 0xffff)
+                );
+            } else {
+                $uuid = \generate_secure_uuid();
+            }
+            $data = [
+                'restoran_id' => $restoranId,
+                'nomor_meja' => $this->request->getPost('nomor_meja'),
+                'keterangan' => $this->request->getPost('keterangan') ?: null,
+                'status' => $this->request->getPost('status'),
+                'uuid' => $uuid,
+            ];
 
-        $data = [
-            'restoran_id' => $restoranId,
-            'nomor_meja' => $this->request->getPost('nomor_meja'),
-            'keterangan' => $this->request->getPost('keterangan'),
-            'status' => 'aktif',
-        ];
-
-        if ($this->mejaModel->insert($data)) {
-            return redirect()->to('admin/meja')->with('success', 'Meja berhasil ditambahkan!');
+            if ($this->mejaModel->insert($data)) {
+                session()->setFlashdata('success', 'Meja berhasil ditambahkan!');
+                return redirect()->to('/admin/meja');
+            } else {
+                session()->setFlashdata('error', 'Gagal menambahkan meja!');
+            }
         } else {
-            return redirect()->back()->withInput()->with('error', 'Gagal menambahkan meja!');
+            session()->setFlashdata('error', 'Validasi gagal!');
         }
+
+        return redirect()->back()->withInput();
     }
 
     public function edit($id)
     {
         $restoranId = session()->get('restoran_id');
         $meja = $this->mejaModel->find($id);
-        
+
         if (!$meja || $meja['restoran_id'] != $restoranId) {
-            return redirect()->to('admin/meja')->with('error', 'Meja tidak ditemukan!');
+            return redirect()->to('/admin/meja')->with('error', 'Meja tidak ditemukan!');
         }
 
         $restoran = $this->restoranModel->find($restoranId);
 
         $data = [
-            'title' => 'Edit Meja - ' . $restoran['nama'],
+            'title' => 'Edit Meja',
             'meja' => $meja,
             'restoran' => $restoran,
+            'validation' => \Config\Services::validation()
         ];
 
         return view('admin/meja/edit', $data);
@@ -95,47 +118,51 @@ class MejaController extends BaseController
     {
         $restoranId = session()->get('restoran_id');
         $meja = $this->mejaModel->find($id);
-        
+
         if (!$meja || $meja['restoran_id'] != $restoranId) {
-            return redirect()->to('admin/meja')->with('error', 'Meja tidak ditemukan!');
+            return redirect()->to('/admin/meja')->with('error', 'Meja tidak ditemukan!');
         }
 
         $rules = [
-            'nomor_meja' => 'required|max_length[50]',
-            'keterangan' => 'max_length[255]',
+            'nomor_meja' => 'required|integer|greater_than[0]',
             'status' => 'required|in_list[aktif,nonaktif]',
         ];
 
-        if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }
+        if ($this->validate($rules)) {
+            $data = [
+                'nomor_meja' => $this->request->getPost('nomor_meja'),
+                'keterangan' => $this->request->getPost('keterangan') ?: null,
+                'status' => $this->request->getPost('status'),
+            ];
 
-        $data = [
-            'nomor_meja' => $this->request->getPost('nomor_meja'),
-            'keterangan' => $this->request->getPost('keterangan'),
-            'status' => $this->request->getPost('status'),
-        ];
-
-        if ($this->mejaModel->update($id, $data)) {
-            return redirect()->to('admin/meja')->with('success', 'Meja berhasil diperbarui!');
+            if ($this->mejaModel->update($id, $data)) {
+                session()->setFlashdata('success', 'Meja berhasil diupdate!');
+                return redirect()->to('/admin/meja');
+            } else {
+                session()->setFlashdata('error', 'Gagal mengupdate meja!');
+            }
         } else {
-            return redirect()->back()->withInput()->with('error', 'Gagal memperbarui meja!');
+            session()->setFlashdata('error', 'Validasi gagal!');
         }
+
+        return redirect()->back()->withInput();
     }
 
     public function delete($id)
     {
         $restoranId = session()->get('restoran_id');
         $meja = $this->mejaModel->find($id);
-        
+
         if (!$meja || $meja['restoran_id'] != $restoranId) {
-            return redirect()->to('admin/meja')->with('error', 'Meja tidak ditemukan!');
+            return redirect()->to('/admin/meja')->with('error', 'Meja tidak ditemukan!');
         }
 
         if ($this->mejaModel->delete($id)) {
-            return redirect()->to('admin/meja')->with('success', 'Meja berhasil dihapus!');
+            session()->setFlashdata('success', 'Meja berhasil dihapus!');
         } else {
-            return redirect()->to('admin/meja')->with('error', 'Gagal menghapus meja!');
+            session()->setFlashdata('error', 'Gagal menghapus meja!');
         }
+
+        return redirect()->to('/admin/meja');
     }
 } 

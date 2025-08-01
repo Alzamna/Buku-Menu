@@ -12,7 +12,7 @@ class RestoranModel extends Model
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
-    protected $allowedFields = ['nama', 'alamat', 'kontak'];
+    protected $allowedFields = ['nama', 'alamat', 'kontak', 'uuid'];
 
     // Dates
     protected $useTimestamps = true;
@@ -46,6 +46,11 @@ class RestoranModel extends Model
 
     protected $skipValidation = false;
     protected $cleanValidationRules = true;
+
+    public function findByUuid($uuid)
+    {
+        return $this->where('uuid', $uuid)->first();
+    }
 
     public function getRestoranWithStats()
     {
