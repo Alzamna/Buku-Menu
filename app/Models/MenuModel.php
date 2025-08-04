@@ -67,7 +67,6 @@ class MenuModel extends Model
         return $this->select('menu.*, kategori.nama as nama_kategori')
                     ->join('kategori', 'kategori.id = menu.kategori_id')
                     ->where('kategori.restoran_id', $restoranId)
-                    ->where('menu.stok >', 0)
                     ->orderBy('kategori.nama', 'ASC')
                     ->orderBy('menu.nama', 'ASC')
                     ->findAll();

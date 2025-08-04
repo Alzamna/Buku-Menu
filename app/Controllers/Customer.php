@@ -90,7 +90,17 @@ class Customer extends BaseController
         }
 
         $menu = $this->menuModel->find($menuId);
-        if (!$menu || $menu['stok'] < $jumlah) {
+        if (!$menu) {
+            session()->setFlashdata('error', 'Menu tidak ditemukan!');
+            return redirect()->back();
+        }
+        
+        if ($menu['stok'] <= 0) {
+            session()->setFlashdata('error', 'Menu ini sedang habis stok!');
+            return redirect()->back();
+        }
+        
+        if ($menu['stok'] < $jumlah) {
             session()->setFlashdata('error', 'Stok tidak mencukupi!');
             return redirect()->back();
         }

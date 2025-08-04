@@ -79,6 +79,52 @@
             color: white;
             font-weight: bold;
         }
+
+        .btn:disabled {
+            opacity: 0.6 !important;
+            cursor: not-allowed !important;
+        }
+        .form-control:disabled {
+            background-color: #e9ecef !important;
+            opacity: 0.6 !important;
+            cursor: not-allowed !important;
+        }
+        .quantity-btn.disabled {
+            background: #6c757d !important;
+            opacity: 0.6 !important;
+            cursor: not-allowed !important;
+        }
+        textarea:disabled {
+            background-color: #e9ecef !important;
+            opacity: 0.6 !important;
+            cursor: not-allowed !important;
+        }
+        .menu-card.disabled {
+            opacity: 0.6 !important;
+            filter: grayscale(30%) !important;
+            pointer-events: none;
+        }
+        .menu-card.disabled .card-body {
+            background-color: #f8f9fa;
+        }
+        .menu-card.disabled .card-title {
+            color: #6c757d;
+        }
+        .menu-card.disabled .card-text {
+            color: #adb5bd;
+        }
+        .menu-card.disabled .menu-price {
+            color: #6c757d;
+        }
+        .menu-card.disabled .menu-image {
+            filter: grayscale(50%);
+        }
+        .menu-card.disabled .card-img-top {
+            filter: grayscale(50%);
+        }
+        .menu-card.disabled .bg-light {
+            filter: grayscale(50%);
+        }
         .quantity-input {
             width: 50px;
             text-align: center;
@@ -125,6 +171,23 @@
     </nav>
 
     <div class="container" style="margin-top: 100px;">
+        <!-- Alert messages -->
+        <?php if (session()->getFlashdata('error')): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <?= session()->getFlashdata('error') ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <?php endif; ?>
+        
+        <?php if (session()->getFlashdata('success')): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                <?= session()->getFlashdata('success') ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <?php endif; ?>
+        
         <!-- Restaurant Header -->
         <div class="menu-container">
             <div class="restaurant-header">
@@ -185,7 +248,15 @@
                             <?php else: ?>
                                 <?php foreach ($menuInKategori as $menu): ?>
                                     <div class="col-md-6 col-lg-4">
-                                        <div class="card menu-card">
+                                        <div class="card menu-card <?= $menu['stok'] <= 0 ? 'disabled' : '' ?>" style="position: relative;">
+                                            <?php if ($menu['stok'] <= 0): ?>
+                                                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" 
+                                                     style="background: rgba(0,0,0,0.1); z-index: 10; border-radius: 15px; pointer-events: none;">
+                                                    <div class="bg-danger text-white px-3 py-2 rounded-pill fw-bold">
+                                                        <i class="fas fa-times-circle me-2"></i>HABIS
+                                                    </div>
+                                                </div>
+                                            <?php endif; ?>
                                             <?php if ($menu['gambar']): ?>
                                                 <img src="<?= base_url('uploads/menu/' . $menu['gambar']) ?>" 
                                                      class="card-img-top menu-image" 
@@ -203,7 +274,11 @@
                                                 </p>
                                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                                     <span class="menu-price">Rp <?= number_format($menu['harga'], 0, ',', '.') ?></span>
-                                                    <span class="badge bg-success">Stok: <?= $menu['stok'] ?></span>
+                                                    <?php if ($menu['stok'] > 0): ?>
+                                                        <span class="badge bg-success">Stok: <?= $menu['stok'] ?></span>
+                                                    <?php else: ?>
+                                                        <span class="badge bg-danger">Habis</span>
+                                                    <?php endif; ?>
                                                 </div>
                                                 
                                                 <form action="<?= base_url('customer/add-to-cart') ?>" method="post">
@@ -213,22 +288,43 @@
                                                     <div class="mb-3">
                                                         <label class="form-label">Jumlah:</label>
                                                         <div class="quantity-control">
-                                                            <button type="button" class="quantity-btn" onclick="decreaseQuantity(<?= $menu['id'] ?>)">-</button>
+                                                            <button type="button" class="quantity-btn <?= $menu['stok'] <= 0 ? 'disabled' : '' ?>" 
+                                                                    onclick="<?= $menu['stok'] > 0 ? 'decreaseQuantity(' . $menu['id'] . ')' : '' ?>" 
+                                                                    <?= $menu['stok'] <= 0 ? 'disabled' : '' ?>>
+                                                                -
+                                                            </button>
                                                             <input type="number" name="jumlah" id="quantity-<?= $menu['id'] ?>" 
-                                                                   class="form-control quantity-input" value="1" min="1" max="<?= $menu['stok'] ?>">
-                                                            <button type="button" class="quantity-btn" onclick="increaseQuantity(<?= $menu['id'] ?>, <?= $menu['stok'] ?>)">+</button>
+                                                                   class="form-control quantity-input" value="1" min="1" max="<?= $menu['stok'] ?>"
+                                                                   <?= $menu['stok'] <= 0 ? 'disabled' : '' ?>>
+                                                            <button type="button" class="quantity-btn <?= $menu['stok'] <= 0 ? 'disabled' : '' ?>" 
+                                                                    onclick="<?= $menu['stok'] > 0 ? 'increaseQuantity(' . $menu['id'] . ', ' . $menu['stok'] . ')' : '' ?>" 
+                                                                    <?= $menu['stok'] <= 0 ? 'disabled' : '' ?>>
+                                                                +
+                                                            </button>
                                                         </div>
                                                     </div>
                                                     
                                                     <div class="mb-3">
                                                         <label class="form-label">Catatan (opsional):</label>
                                                         <textarea name="catatan" class="form-control" rows="2" 
-                                                                  placeholder="Contoh: Tidak pedas, tambah sayur, dll"></textarea>
+                                                                  placeholder="Contoh: Tidak pedas, tambah sayur, dll"
+                                                                  <?= $menu['stok'] <= 0 ? 'disabled' : '' ?>></textarea>
                                                     </div>
                                                     
-                                                    <button type="submit" class="btn btn-primary w-100">
-                                                        <i class="fas fa-plus me-2"></i>Tambah ke Keranjang
+                                                    <button type="submit" class="btn w-100 <?= $menu['stok'] > 0 ? 'btn-primary' : 'btn-secondary' ?>" 
+                                                            <?= $menu['stok'] <= 0 ? 'disabled' : '' ?>>
+                                                        <i class="fas fa-plus me-2"></i>
+                                                        <?= $menu['stok'] > 0 ? 'Tambah ke Keranjang' : 'Stok Habis' ?>
                                                     </button>
+                                                    
+                                                    <?php if ($menu['stok'] <= 0): ?>
+                                                        <div class="text-center mt-2">
+                                                            <small class="text-muted">
+                                                                <i class="fas fa-info-circle me-1"></i>
+                                                                Menu ini sedang tidak tersedia
+                                                            </small>
+                                                        </div>
+                                                    <?php endif; ?>
                                                 </form>
                                             </div>
                                         </div>
