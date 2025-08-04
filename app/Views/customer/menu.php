@@ -251,8 +251,8 @@
                                         <div class="card menu-card <?= $menu['stok'] <= 0 ? 'disabled' : '' ?>" style="position: relative;">
                                             <?php if ($menu['stok'] <= 0): ?>
                                                 <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" 
-                                                     style="background: rgba(0,0,0,0.1); z-index: 10; border-radius: 15px; pointer-events: none;">
-                                                    <div class="bg-danger text-white px-3 py-2 rounded-pill fw-bold">
+                                                     style="background: rgba(0,0,0,0.1); z-index: 9; border-radius: 15px; pointer-events: none;">
+                                                    <div class="bg-danger text-white px-3 py-2 rounded-pill z-index: 10; fw-bold position-absolute start-0 top-0 m-3" style="z-index: 20;">
                                                         <i class="fas fa-times-circle me-2"></i>HABIS
                                                     </div>
                                                 </div>
