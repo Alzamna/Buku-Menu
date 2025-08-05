@@ -20,16 +20,35 @@ class MejaController extends BaseController
     {
         $restoranId = session()->get('restoran_id');
         $restoran = $this->restoranModel->find($restoranId);
-        $mejaList = $this->mejaModel->getMejaByRestoran($restoranId);
+
+        $restoranUuid = $restoran['uuid'];
+        $filter = $this->request->getGet('filter') ?? 'aktif';
+        $search = $this->request->getGet('q') ?? '';
+        $page = (int) ($this->request->getGet('page') ?? 1);
+        $perPage = 15;
+
+        $result = $this->mejaModel->getMejaByRestoranUuidWithPaginationAndFilterAndSearch(
+            $restoranUuid,
+            $filter,
+            $search,
+            $page,
+            $perPage
+        );
 
         $data = [
             'title' => 'Kelola Meja',
             'restoran' => $restoran,
-            'meja_list' => $mejaList,
+            'meja_list' => $result['data'],
+            'total_records' => $result['total'],
+            'current_filter' => $filter,
+            'current_query' => $search,
+            'current_page' => $page,
+            'total_pages' => $result['total_pages'],
         ];
 
         return view('admin/meja/index', $data);
     }
+
 
     public function create()
     {
