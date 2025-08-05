@@ -52,6 +52,30 @@
             transition: transform 0.3s ease;
             margin-bottom: 20px;
         }
+          .menu-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu-card .card-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 280px;
+            /* Bisa disesuaikan */
+        }
+
+        .card.menu-card {
+            min-height: 500px;
+            /* Sesuaikan dengan kebutuhan tampilan */
+        }
         .menu-card:hover {
             transform: translateY(-5px);
         }
@@ -247,7 +271,7 @@
                                 </div>
                             <?php else: ?>
                                 <?php foreach ($menuInKategori as $menu): ?>
-                                    <div class="col-md-6 col-lg-4">
+                                    <div class="col-md-6 col-lg-4 mb-4">
                                         <div class="card menu-card <?= $menu['stok'] <= 0 ? 'disabled' : '' ?>" style="position: relative;">
                                             <?php if ($menu['stok'] <= 0): ?>
                                                 <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" 
