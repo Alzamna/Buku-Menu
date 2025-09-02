@@ -252,12 +252,22 @@ class Admin extends BaseController
                 ];
 
                 // Handle image upload
+                // Handle image upload (sejalur dengan create)
                 $gambar = $this->request->getFile('gambar');
-                if ($gambar->isValid() && !$gambar->hasMoved()) {
+                if ($gambar && $gambar->isValid() && !$gambar->hasMoved()) {
                     $newName = $gambar->getRandomName();
-                    $gambar->move(ROOTPATH . 'public/uploads/menu', $newName);
+                    $gambar->move(FCPATH . 'uploads/menu', $newName);
                     $data['gambar'] = $newName;
+
+                    // Hapus gambar lama kalau ada
+                    if (!empty($menu['gambar']) && file_exists(FCPATH . 'uploads/menu/' . $menu['gambar'])) {
+                        unlink(FCPATH . 'uploads/menu/' . $menu['gambar']);
+                    }
+                } else {
+                    // Kalau tidak upload, tetap pakai gambar lama
+                    $data['gambar'] = $menu['gambar'];
                 }
+
 
                 if ($this->menuModel->update($id, $data)) {
                     session()->setFlashdata('success', 'Menu berhasil diupdate!');
@@ -279,6 +289,7 @@ class Admin extends BaseController
 
         return view('admin/menu/edit', $data);
     }
+
 
     public function menuDelete($id)
     {
