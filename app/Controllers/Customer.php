@@ -34,20 +34,22 @@ class Customer extends BaseController
         }
 
         // Store restaurant ID in session for checkout
+        // Store restaurant ID + UUID in session for checkout
         session()->set('restoran_id', $restoran['id']);
+        session()->set('restoran_uuid', $restoran['uuid']);
 
-        $meja = null;
         if ($mejaUuid) {
             $mejaModel = new \App\Models\MejaModel();
             $meja = $mejaModel->findByUuid($mejaUuid);
             if (!$meja || $meja['restoran_id'] != $restoran['id']) {
                 return redirect()->to('/')->with('error', 'Meja tidak ditemukan!');
             }
-            // Store meja_id in session for checkout
+            // Store meja_id + uuid in session
             session()->set('meja_id', $meja['id']);
+            session()->set('meja_uuid', $meja['uuid']);
         } else {
             // Clear meja_id from session if no meja specified
-            session()->remove('meja_id');
+            session()->remove(['meja_id', 'meja_uuid']);
         }
 
         $kategoriList = $this->kategoriModel->getKategoriByRestoran($restoran['id']);
@@ -94,12 +96,12 @@ class Customer extends BaseController
             session()->setFlashdata('error', 'Menu tidak ditemukan!');
             return redirect()->back();
         }
-        
+
         if ($menu['stok'] <= 0) {
             session()->setFlashdata('error', 'Menu ini sedang habis stok!');
             return redirect()->back();
         }
-        
+
         if ($menu['stok'] < $jumlah) {
             session()->setFlashdata('error', 'Stok tidak mencukupi!');
             return redirect()->back();
@@ -184,6 +186,7 @@ class Customer extends BaseController
 
         return redirect()->to('/customer/cart');
     }
+
 
     public function removeFromCart($index)
     {
@@ -362,8 +365,8 @@ class Customer extends BaseController
         if (isset($pesanan['meja']) && $pesanan['meja']) {
             $mejaModel = new \App\Models\MejaModel();
             $meja = $mejaModel->where('restoran_id', $pesanan['restoran_id'])
-                             ->where('nomor_meja', $pesanan['meja'])
-                             ->first();
+                ->where('nomor_meja', $pesanan['meja'])
+                ->first();
             if ($meja) {
                 session()->set('completion_meja_uuid', $meja['uuid']);
             }
@@ -392,7 +395,7 @@ class Customer extends BaseController
         // Clean up session data after completion page is shown
         session()->remove('completion_restoran_uuid');
         session()->remove('completion_meja_uuid');
-        
+
         return $this->response->setJSON(['success' => true]);
     }
 

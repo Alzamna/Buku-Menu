@@ -126,15 +126,18 @@
                                         </p>
                                     </div>
                                     
-                                    <div class="col-md-2">
-                                        <div class="quantity-control">
-                                            <button type="button" class="quantity-btn" onclick="decreaseQuantity(<?= $index ?>)">-</button>
-                                            <input type="number" name="jumlah_<?= $index ?>" 
-                                                   class="form-control quantity-input" 
-                                                   value="<?= $item['jumlah'] ?>" min="1">
-                                            <button type="button" class="quantity-btn" onclick="increaseQuantity(<?= $index ?>)">+</button>
-                                        </div>
+                                   <div class="col-md-2">
+    <div class="quantity-control d-flex align-items-center justify-content-center">
+        <button type="button" class="quantity-btn btn btn-outline-secondary mx-2" onclick="decreaseQuantity(<?= $index ?>)">-</button>
+                                
+                                        <input type="number" name="jumlah_<?= $index ?>" class="form-control text-center quantity-input mx-2"
+                                            value="<?= $item['jumlah'] ?>" min="1" style="max-width: 60px;">
+                                
+                                        <button type="button" class="quantity-btn btn btn-outline-secondary mx-2"
+                                            onclick="increaseQuantity(<?= $index ?>)">+</button>
                                     </div>
+                                </div>
+
                                     
                                     <div class="col-md-3">
                                         <input type="text" name="catatan_<?= $index ?>" 
@@ -156,9 +159,22 @@
                         
                         <div class="d-flex justify-content-between align-items-center mt-4">
                             <div>
-                                <a href="<?= base_url() ?>" class="btn btn-secondary">
-                                    <i class="fas fa-arrow-left me-2"></i>Lanjut Belanja
-                                </a>
+                        <?php
+                            $restoranUuid = session('restoran_uuid');
+                            $mejaUuid = session('meja_uuid');
+
+                            $menuUrl = $restoranUuid
+                                ? base_url('customer/menu/' . $restoranUuid . ($mejaUuid ? '/' . $mejaUuid : ''))
+                                : base_url('/'); // fallback kalau session kosong
+                            ?>
+                        
+                        <a href="<?= $menuUrl ?>" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i> Lanjut Belanja
+                        </a>
+
+
+
+
                                 <button type="submit" class="btn btn-warning ms-2">
                                     <i class="fas fa-sync me-2"></i>Update Keranjang
                                 </button>

@@ -20,7 +20,7 @@ class Admin extends BaseController
         $this->menuModel = new MenuModel();
         $this->pesananModel = new PesananModel();
         $this->restoranModel = new RestoranModel();
-        
+
         // Check if user is admin restoran
         if (session()->get('role') !== 'admin_restoran') {
             return redirect()->to('/auth')->with('error', 'Akses ditolak!');
@@ -31,19 +31,19 @@ class Admin extends BaseController
     public function dashboard()
     {
         $restoranId = session()->get('restoran_id');
-        
+
         $data = [
             'title' => 'Dashboard Admin Restoran',
             'restoran' => $this->restoranModel->find($restoranId),
             'total_kategori' => $this->kategoriModel->where('restoran_id', $restoranId)->countAllResults(),
             'total_menu' => $this->menuModel->select('menu.*')
-                                          ->join('kategori', 'kategori.id = menu.kategori_id')
-                                          ->where('kategori.restoran_id', $restoranId)
-                                          ->countAllResults(),
+                ->join('kategori', 'kategori.id = menu.kategori_id')
+                ->where('kategori.restoran_id', $restoranId)
+                ->countAllResults(),
             'total_pesanan' => $this->pesananModel->where('restoran_id', $restoranId)->countAllResults(),
             'pesanan_pending' => $this->pesananModel->where('restoran_id', $restoranId)
-                                                   ->where('status', 'pending')
-                                                   ->countAllResults(),
+                ->where('status', 'pending')
+                ->countAllResults(),
         ];
 
         return view('admin/dashboard', $data);
@@ -53,7 +53,7 @@ class Admin extends BaseController
     public function kategori()
     {
         $restoranId = session()->get('restoran_id');
-        
+
         $data = [
             'title' => 'Kelola Kategori',
             'kategori_list' => $this->kategoriModel->getKategoriWithMenuCount($restoranId)
@@ -100,9 +100,9 @@ class Admin extends BaseController
     {
         $restoranId = session()->get('restoran_id');
         $kategori = $this->kategoriModel->where('id', $id)
-                                       ->where('restoran_id', $restoranId)
-                                       ->first();
-        
+            ->where('restoran_id', $restoranId)
+            ->first();
+
         if (!$kategori) {
             return redirect()->to('/admin/kategori')->with('error', 'Kategori tidak ditemukan!');
         }
@@ -141,9 +141,9 @@ class Admin extends BaseController
     {
         $restoranId = session()->get('restoran_id');
         $kategori = $this->kategoriModel->where('id', $id)
-                                       ->where('restoran_id', $restoranId)
-                                       ->first();
-        
+            ->where('restoran_id', $restoranId)
+            ->first();
+
         if ($kategori) {
             if ($this->kategoriModel->delete($id)) {
                 session()->setFlashdata('success', 'Kategori berhasil dihapus!');
@@ -161,7 +161,7 @@ class Admin extends BaseController
     public function menu()
     {
         $restoranId = session()->get('restoran_id');
-        
+
         $data = [
             'title' => 'Kelola Menu',
             'menu_list' => $this->menuModel->getMenuWithKategori($restoranId)
@@ -193,9 +193,9 @@ class Admin extends BaseController
 
                 // Handle image upload
                 $gambar = $this->request->getFile('gambar');
-                if ($gambar->isValid() && !$gambar->hasMoved()) {
+                if ($gambar && $gambar->isValid() && !$gambar->hasMoved()) {
                     $newName = $gambar->getRandomName();
-                    $gambar->move(ROOTPATH . 'public/uploads/menu', $newName);
+                    $gambar->move(FCPATH . 'uploads/menu', $newName);
                     $data['gambar'] = $newName;
                 }
 
@@ -217,17 +217,19 @@ class Admin extends BaseController
         ];
 
         return view('admin/menu/create', $data);
-    }
+    } // ✅ ini wajib ada agar function tertutup
+
+
 
     public function menuEdit($id)
     {
         $restoranId = session()->get('restoran_id');
         $menu = $this->menuModel->select('menu.*, kategori.restoran_id')
-                               ->join('kategori', 'kategori.id = menu.kategori_id')
-                               ->where('menu.id', $id)
-                               ->where('kategori.restoran_id', $restoranId)
-                               ->first();
-        
+            ->join('kategori', 'kategori.id = menu.kategori_id')
+            ->where('menu.id', $id)
+            ->where('kategori.restoran_id', $restoranId)
+            ->first();
+
         if (!$menu) {
             return redirect()->to('/admin/menu')->with('error', 'Menu tidak ditemukan!');
         }
@@ -282,11 +284,11 @@ class Admin extends BaseController
     {
         $restoranId = session()->get('restoran_id');
         $menu = $this->menuModel->select('menu.*, kategori.restoran_id')
-                               ->join('kategori', 'kategori.id = menu.kategori_id')
-                               ->where('menu.id', $id)
-                               ->where('kategori.restoran_id', $restoranId)
-                               ->first();
-        
+            ->join('kategori', 'kategori.id = menu.kategori_id')
+            ->where('menu.id', $id)
+            ->where('kategori.restoran_id', $restoranId)
+            ->first();
+
         if ($menu) {
             if ($this->menuModel->delete($id)) {
                 session()->setFlashdata('success', 'Menu berhasil dihapus!');
@@ -331,13 +333,13 @@ class Admin extends BaseController
     {
         $restoranId = session()->get('restoran_id');
         $pesanan = $this->pesananModel->getPesananWithDetails($id);
-        
+
         if (!$pesanan || $pesanan['restoran_id'] != $restoranId) {
             return redirect()->to('/admin/pesanan')->with('error', 'Pesanan tidak ditemukan!');
         }
 
         $pesananDetailModel = new \App\Models\PesananDetailModel();
-        
+
         $data = [
             'title' => 'Detail Pesanan',
             'pesanan' => $pesanan,
@@ -351,15 +353,15 @@ class Admin extends BaseController
     {
         $restoranId = session()->get('restoran_id');
         $pesanan = $this->pesananModel->where('id', $id)
-                                     ->where('restoran_id', $restoranId)
-                                     ->first();
-        
+            ->where('restoran_id', $restoranId)
+            ->first();
+
         if (!$pesanan) {
             return redirect()->to('/admin/pesanan')->with('error', 'Pesanan tidak ditemukan!');
         }
 
         $status = $this->request->getPost('status');
-        
+
         if ($this->pesananModel->updateStatus($id, $status)) {
             session()->setFlashdata('success', 'Status pesanan berhasil diupdate!');
         } else {
@@ -368,4 +370,4 @@ class Admin extends BaseController
 
         return redirect()->to('/admin/pesanan');
     }
-} 
+}

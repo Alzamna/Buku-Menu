@@ -44,13 +44,11 @@
                                     <td><?= $index + 1 ?></td>
                                     <td>
                                         <?php if ($menu['gambar']): ?>
-                                            <img src="<?= base_url('uploads/menu/' . $menu['gambar']) ?>" 
-                                                 alt="<?= $menu['nama'] ?>" 
-                                                 class="img-thumbnail" 
-                                                 style="width: 50px; height: 50px; object-fit: cover;">
+                                            <img src="<?= base_url('uploads/menu/' . $menu['gambar']) ?>" alt="<?= $menu['nama'] ?>"
+                                                class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
                                         <?php else: ?>
-                                            <div class="bg-light d-flex align-items-center justify-content-center" 
-                                                 style="width: 50px; height: 50px;">
+                                            <div class="bg-light d-flex align-items-center justify-content-center"
+                                                style="width: 50px; height: 50px;">
                                                 <i class="fas fa-utensils text-muted"></i>
                                             </div>
                                         <?php endif; ?>
@@ -65,7 +63,8 @@
                                         <span class="badge bg-info"><?= esc($menu['nama_kategori']) ?></span>
                                     </td>
                                     <td>
-                                        <strong class="text-success">Rp <?= number_format($menu['harga'], 0, ',', '.') ?></strong>
+                                        <strong class="text-success">Rp
+                                            <?= number_format($menu['harga'], 0, ',', '.') ?></strong>
                                     </td>
                                     <td>
                                         <?php if ($menu['stok'] > 0): ?>
@@ -76,13 +75,13 @@
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="<?= base_url('admin/menu/edit/' . $menu['id']) ?>" 
-                                               class="btn btn-sm btn-warning" title="Edit">
+                                            <a href="<?= base_url('admin/menu/edit/' . $menu['id']) ?>"
+                                                class="btn btn-sm btn-warning" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="<?= base_url('admin/menu/delete/' . $menu['id']) ?>" 
-                                               class="btn btn-sm btn-danger" title="Hapus"
-                                               onclick="return confirm('Yakin ingin menghapus menu ini?')">
+                                            <a href="<?= base_url('admin/menu/delete/' . $menu['id']) ?>"
+                                                class="btn btn-sm btn-danger" title="Hapus"
+                                                onclick="return confirm('Yakin ingin menghapus menu ini?')">
                                                 <i class="fas fa-trash"></i>
                                             </a>
                                         </div>
@@ -96,4 +95,4 @@
         </div>
     </div>
 </div>
-<?= $this->endSection() ?> 
+<?= $this->endSection() ?>
