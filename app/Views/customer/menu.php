@@ -296,14 +296,6 @@
                                                 <p class="card-text text-muted">
                                                     <?= $menu['deskripsi'] ?: 'Tidak ada deskripsi' ?>
                                                 </p>
-                                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                                    <span class="menu-price">Rp <?= number_format($menu['harga'], 0, ',', '.') ?></span>
-                                                    <?php if ($menu['stok'] > 0): ?>
-                                                        <span class="badge bg-success">Stok: <?= $menu['stok'] ?></span>
-                                                    <?php else: ?>
-                                                        <span class="badge bg-danger">Habis</span>
-                                                    <?php endif; ?>
-                                                </div>
                                                 
                                                 <form action="<?= base_url('customer/add-to-cart') ?>" method="post">
                                                         <?= csrf_field(); ?>
