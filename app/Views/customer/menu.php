@@ -296,6 +296,10 @@
                                                 <p class="card-text text-muted">
                                                     <?= $menu['deskripsi'] ?: 'Tidak ada deskripsi' ?>
                                                 </p>
+                                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                                    <span class="menu-price">Rp <?= number_format($menu['harga'], 0, ',', '.') ?></span>
+                                                    
+                                                </div>
                                                 
                                                 <form action="<?= base_url('customer/add-to-cart') ?>" method="post">
                                                         <?= csrf_field(); ?>
@@ -321,9 +325,9 @@
                                                     </div>
                                                     
                                                     <div class="mb-3">
-                                                        <label class="form-label">Catatan (opsional):</label>
+                                                        <label class="form-label">Tambah Catatan:</label>
                                                         <textarea name="catatan" class="form-control" rows="2" 
-                                                                  placeholder="Contoh: Tidak pedas, tambah sayur, dll"
+                                                                  placeholder="Catatan untuk penjual"
                                                                   <?= $menu['stok'] <= 0 ? 'disabled' : '' ?>></textarea>
                                                     </div>
                                                     
