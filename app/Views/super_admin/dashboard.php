@@ -98,15 +98,20 @@
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="<?= base_url('super-admin/restoran/edit/' . $restoran['id']) ?>" 
-                                               class="btn btn-sm btn-warning" title="Edit">
+                                            <a href="<?= base_url('super-admin/restoran/edit/' . $restoran['id']) ?>"
+                                                class="btn btn-sm btn-warning" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="<?= base_url('super-admin/restoran/delete/' . $restoran['id']) ?>" 
-                                               class="btn btn-sm btn-danger" title="Hapus"
-                                               onclick="return confirm('Yakin ingin menghapus restoran ini?')">
+                                            <a href="<?= base_url('super-admin/restoran/delete/' . $restoran['id']) ?>"
+                                                class="btn btn-sm btn-danger" title="Hapus"
+                                                onclick="return confirm('Yakin ingin menghapus restoran ini?')">
                                                 <i class="fas fa-trash"></i>
                                             </a>
+                                            <!-- View Menu Button -->
+                                           <a href="<?= base_url('super-admin/restoran/menu/' . $restoran['id']) ?>" class="btn btn-sm btn-info"
+                                            title="Lihat Menu">
+                                            <i class="fas fa-search"></i>
+                                        </a>
                                         </div>
                                     </td>
                                 </tr>
@@ -145,7 +150,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-md-6">
             <div class="card shadow">
                 <div class="card-header py-3">
@@ -178,4 +183,4 @@
         </div>
     </div>
 </div>
-<?= $this->endSection() ?> 
+<?= $this->endSection() ?>

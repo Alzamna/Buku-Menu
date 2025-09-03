@@ -4,21 +4,25 @@ namespace App\Controllers;
 
 use App\Models\RestoranModel;
 use App\Models\UserModel;
+use App\Models\MenuModel;
 
 class SuperAdmin extends BaseController
 {
     protected $restoranModel;
     protected $userModel;
+    protected $menuModel;
 
     public function __construct()
     {
         $this->restoranModel = new RestoranModel();
         $this->userModel = new UserModel();
+        $this->menuModel = new MenuModel();
 
         // Check if user is super admin
         if (session()->get('role') !== 'super_admin') {
             return redirect()->to('/auth')->with('error', 'Akses ditolak!');
         }
+
     }
 
     public function dashboard()
@@ -41,6 +45,29 @@ class SuperAdmin extends BaseController
         ];
 
         return view('super_admin/restoran/index', $data);
+    }
+    public function viewmenu($restoranId)
+    {
+        // Ambil data restoran
+        $restoran = $this->restoranModel->find($restoranId);
+        if (!$restoran) {
+            return redirect()->to('super-admin/restoran')->with('error', 'Restoran tidak ditemukan');
+        }
+
+        // Ambil semua menu yang ada di restoran ini
+        $menus = $this->menuModel
+            ->select('menu.*, kategori.nama as kategori_nama')
+            ->join('kategori', 'kategori.id = menu.kategori_id')
+            ->where('kategori.restoran_id', $restoranId)
+            ->findAll();
+
+        $data = [
+            'title' => 'Daftar Menu - ' . $restoran['nama'],
+            'restoran' => $restoran,
+            'menus' => $menus
+        ];
+
+        return view('super_admin/restoran_menu', $data);
     }
 
     public function restoranCreate()

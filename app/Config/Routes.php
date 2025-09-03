@@ -1,5 +1,5 @@
 <?php
- 
+
 use CodeIgniter\Router\RouteCollection;
 
 /**
@@ -15,7 +15,7 @@ $routes->post('b0/super-admin', 'Auth::superAdminLoginProcess');
 $routes->get('auth/logout', 'Auth::logout');
 
 // Super Admin Routes
-$routes->group('super-admin', ['filter' => 'auth'], function($routes) {
+$routes->group('super-admin', ['filter' => 'auth'], function ($routes) {
     $routes->get('dashboard', 'SuperAdmin::dashboard');
     $routes->get('restoran', 'SuperAdmin::restoran');
     $routes->get('restoran/create', 'SuperAdmin::restoranCreate');
@@ -27,10 +27,11 @@ $routes->group('super-admin', ['filter' => 'auth'], function($routes) {
     $routes->get('admin/create', 'SuperAdmin::adminCreate');
     $routes->post('admin/create', 'SuperAdmin::adminCreate');
     $routes->get('admin/delete/(:num)', 'SuperAdmin::adminDelete/$1');
+    $routes->get('restoran/menu/(:num)', 'SuperAdmin::viewMenu/$1');
 });
 
 // Admin Restoran Routes
-$routes->group('admin', ['filter' => 'admin_restoran'], function($routes) {
+$routes->group('admin', ['filter' => 'admin_restoran'], function ($routes) {
     // routes...
 
     $routes->get('dashboard', 'Admin::dashboard');
