@@ -4,18 +4,21 @@ namespace App\Controllers;
 
 use App\Models\RestoranModel;
 use App\Models\UserModel;
+use App\Models\KategoriModel;
 use App\Models\MenuModel;
 
 class SuperAdmin extends BaseController
 {
     protected $restoranModel;
     protected $userModel;
+    protected $kategoriModel;
     protected $menuModel;
 
     public function __construct()
     {
         $this->restoranModel = new RestoranModel();
         $this->userModel = new UserModel();
+        $this->kategoriModel = new KategoriModel();
         $this->menuModel = new MenuModel();
 
         // Check if user is super admin
@@ -35,6 +38,42 @@ class SuperAdmin extends BaseController
         ];
 
         return view('super_admin/dashboard', $data);
+    }
+
+    // Tambahkan method ini di dalam class SuperAdmin
+
+    public function restoranMenu($restoranId)
+    {
+        // Ambil data restoran
+        $restoran = $this->restoranModel->find($restoranId);
+        
+        if (!$restoran) {
+            return redirect()->to('/super-admin/dashboard')->with('error', 'Restoran tidak ditemukan!');
+        }
+
+        // Gunakan method yang sama seperti di Customer controller
+        $kategoriList = $this->kategoriModel->getKategoriByRestoran($restoran['id']);
+        $menuList = $this->menuModel->getMenuByRestoran($restoran['id']);
+
+        // Group menu by category (sama seperti di Customer controller)
+        $menuByKategori = [];
+        foreach ($menuList as $menu) {
+            $kategoriName = $menu['nama_kategori'];
+            if (!isset($menuByKategori[$kategoriName])) {
+                $menuByKategori[$kategoriName] = [];
+            }
+            $menuByKategori[$kategoriName][] = $menu;
+        }
+
+        $data = [
+            'title' => 'Menu ' . $restoran['nama'],
+            'restoran' => $restoran,
+            'kategori_list' => $kategoriList,
+            'menu_by_kategori' => $menuByKategori,
+            'menu_list' => $menuList
+        ];
+        
+        return view('super_admin/restoran/menu', $data);
     }
 
     public function restoran()

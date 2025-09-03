@@ -98,8 +98,13 @@
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="<?= base_url('super-admin/restoran/edit/' . $restoran['id']) ?>"
-                                                class="btn btn-sm btn-warning" title="Edit">
+                                            <!-- Tombol Kaca Pembesar untuk Melihat Menu -->
+                                            <a href="<?= base_url('super-admin/restoran/menu/' . $restoran['id']) ?>" 
+                                            class="btn btn-sm btn-info" title="Lihat Menu">
+                                                <i class="fas fa-search"></i>
+                                            </a>
+                                            <a href="<?= base_url('super-admin/restoran/edit/' . $restoran['id']) ?>" 
+                                               class="btn btn-sm btn-warning" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <a href="<?= base_url('super-admin/restoran/delete/' . $restoran['id']) ?>"
@@ -183,4 +188,5 @@
         </div>
     </div>
 </div>
+<?= $this->endSection() ?>
 <?= $this->endSection() ?>

@@ -23,6 +23,7 @@ $routes->group('super-admin', ['filter' => 'auth'], function ($routes) {
     $routes->get('restoran/edit/(:num)', 'SuperAdmin::restoranEdit/$1');
     $routes->post('restoran/edit/(:num)', 'SuperAdmin::restoranEdit/$1');
     $routes->get('restoran/delete/(:num)', 'SuperAdmin::restoranDelete/$1');
+    $routes->get('restoran/menu/(:num)', 'SuperAdmin::restoranMenu/$1');
     $routes->get('admin', 'SuperAdmin::admin');
     $routes->get('admin/create', 'SuperAdmin::adminCreate');
     $routes->post('admin/create', 'SuperAdmin::adminCreate');
