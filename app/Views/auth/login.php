@@ -65,7 +65,7 @@
                 <div class="login-card">
                     <div class="login-header">
                         <i class="fas fa-utensils fa-3x mb-3"></i>
-                        <h2 class="mb-0">Menu Restoran</h2>
+                        <h2 class="mb-0">Menu Restorannn</h2>
                         <p class="mb-0">Silakan login untuk melanjutkan</p>
                     </div>
 

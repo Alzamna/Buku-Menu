@@ -24,7 +24,7 @@ class Auth extends BaseController
                 return redirect()->to('/admin/dashboard');
             }
         }
-        
+
         return view('auth/login');
     }
 
@@ -34,7 +34,7 @@ class Auth extends BaseController
         if (session()->get('logged_in') && session()->get('role') === 'super_admin') {
             return redirect()->to('/super-admin/dashboard');
         }
-        
+
         return view('auth/super_admin_login');
     }
 
@@ -97,4 +97,4 @@ class Auth extends BaseController
             return redirect()->back();
         }
     }
-} 
+}
