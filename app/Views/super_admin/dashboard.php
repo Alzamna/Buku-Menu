@@ -98,11 +98,6 @@
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <!-- Tombol Kaca Pembesar untuk Melihat Menu -->
-                                            <a href="<?= base_url('super-admin/restoran/menu/' . $restoran['id']) ?>" 
-                                            class="btn btn-sm btn-info" title="Lihat Menu">
-                                                <i class="fas fa-search"></i>
-                                            </a>
                                             <a href="<?= base_url('super-admin/restoran/edit/' . $restoran['id']) ?>" 
                                                class="btn btn-sm btn-warning" title="Edit">
                                                 <i class="fas fa-edit"></i>
@@ -188,5 +183,4 @@
         </div>
     </div>
 </div>
-<?= $this->endSection() ?>
 <?= $this->endSection() ?>
