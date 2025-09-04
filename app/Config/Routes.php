@@ -29,6 +29,13 @@ $routes->group('super-admin', ['filter' => 'auth'], function ($routes) {
     $routes->post('admin/create', 'SuperAdmin::adminCreate');
     $routes->get('admin/delete/(:num)', 'SuperAdmin::adminDelete/$1');
     $routes->get('restoran/menu/(:num)', 'SuperAdmin::viewMenu/$1');
+
+    $routes->group('paket', function ($routes) {
+        $routes->get('', 'SuperAdmin::paket');
+        $routes->match(['get', 'post'], 'create', 'SuperAdmin::paketCreate');
+        $routes->match(['get', 'post'], 'edit/(:num)', 'SuperAdmin::paketEdit/$1');
+        $routes->get('delete/(:num)', 'SuperAdmin::paketDelete/$1');
+    });
 });
 
 // Admin Restoran Routes

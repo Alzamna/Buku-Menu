@@ -98,8 +98,8 @@
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="<?= base_url('super-admin/restoran/edit/' . $restoran['id']) ?>" 
-                                               class="btn btn-sm btn-warning" title="Edit">
+                                            <a href="<?= base_url('super-admin/restoran/edit/' . $restoran['id']) ?>"
+                                                class="btn btn-sm btn-warning" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <a href="<?= base_url('super-admin/restoran/delete/' . $restoran['id']) ?>"
@@ -108,10 +108,10 @@
                                                 <i class="fas fa-trash"></i>
                                             </a>
                                             <!-- View Menu Button -->
-                                           <a href="<?= base_url('super-admin/restoran/menu/' . $restoran['id']) ?>" class="btn btn-sm btn-info"
-                                            title="Lihat Menu">
-                                            <i class="fas fa-search"></i>
-                                        </a>
+                                            <a href="<?= base_url('super-admin/restoran/menu/' . $restoran['id']) ?>" class="btn btn-sm btn-info"
+                                                title="Lihat Menu">
+                                                <i class="fas fa-search"></i>
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>

@@ -6,6 +6,7 @@ use App\Models\RestoranModel;
 use App\Models\UserModel;
 use App\Models\KategoriModel;
 use App\Models\MenuModel;
+use App\Models\PaketModel;
 
 class SuperAdmin extends BaseController
 {
@@ -13,6 +14,7 @@ class SuperAdmin extends BaseController
     protected $userModel;
     protected $kategoriModel;
     protected $menuModel;
+    protected $paketModel;
 
     public function __construct()
     {
@@ -20,12 +22,12 @@ class SuperAdmin extends BaseController
         $this->userModel = new UserModel();
         $this->kategoriModel = new KategoriModel();
         $this->menuModel = new MenuModel();
+        $this->paketModel = new PaketModel();
 
         // Check if user is super admin
         if (session()->get('role') !== 'super_admin') {
             return redirect()->to('/auth')->with('error', 'Akses ditolak!');
         }
-
     }
 
     public function dashboard()
@@ -46,7 +48,7 @@ class SuperAdmin extends BaseController
     {
         // Ambil data restoran
         $restoran = $this->restoranModel->find($restoranId);
-        
+
         if (!$restoran) {
             return redirect()->to('/super-admin/dashboard')->with('error', 'Restoran tidak ditemukan!');
         }
@@ -72,7 +74,7 @@ class SuperAdmin extends BaseController
             'menu_by_kategori' => $menuByKategori,
             'menu_list' => $menuList
         ];
-        
+
         return view('super_admin/restoran/menu', $data);
     }
 
@@ -287,5 +289,148 @@ class SuperAdmin extends BaseController
         }
 
         return redirect()->to('/super-admin/admin');
+    }
+
+    // Master Paket
+
+    public function paket()
+    {
+        $data = [
+            'title' => 'Kelola Paket Langganan Restoran',
+            'paket_list' => $this->paketModel->findAll(),
+        ];
+
+        return view('super_admin/paket/index', $data);
+    }
+
+    public function paketCreate()
+    {
+        if ($this->request->getMethod() == 'POST') {
+            $rules = [
+                'nama' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Nama restoran harus di isi.',
+                    ]
+                ],
+                'harga' => [
+                    'rules' => 'required|integer',
+                    'errors' => [
+                        'required' => 'Harga harus di isi.',
+                        'integer' => 'Harga harus berisi angka.',
+                    ]
+                ],
+                'durasi' => [
+                    'rules' => 'required|integer',
+                    'errors' => [
+                        'required' => 'Durasi harus di isi.',
+                        'integer' => 'Durasi harus berisi angka.',
+                    ]
+                ],
+                'deskripsi' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Deskripsi harus di isi.',
+                    ]
+                ],
+            ];
+
+            if ($this->validate($rules)) {
+                if ($this->paketModel->insert($this->request->getPost())) {
+                    session()->setFlashdata('success', 'Paket berhasil ditambahkan!');
+                    return redirect()->to('/super-admin/paket');
+                } else {
+                    session()->setFlashdata('error', 'Gagal menambahkan admin!');
+                }
+            } else {
+                session()->setFlashdata('error', 'Validasi gagal!');
+                session()->setFlashdata('errors', $this->validator->getErrors());
+            }
+        }
+
+        $data = [
+            'title' => 'Tambah Paket Restoran',
+            'restoran_list' => $this->restoranModel->findAll(),
+            'validation' => \Config\Services::validation()
+        ];
+
+        return view('super_admin/paket/create', $data);
+    }
+
+    public function paketEdit($id)
+    {
+        $paket = $this->paketModel->find($id);
+
+        if (!$paket) {
+            return redirect()->to('/super-admin/paket')->with('error', 'Paket tidak ditemukan!');
+        }
+
+        if ($this->request->getMethod() == 'POST') {
+            $rules = [
+                'nama' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Nama restoran harus di isi.',
+                    ]
+                ],
+                'harga' => [
+                    'rules' => 'required|integer',
+                    'errors' => [
+                        'required' => 'Harga harus di isi.',
+                        'integer' => 'Harga harus berisi angka.',
+                    ]
+                ],
+                'durasi' => [
+                    'rules' => 'required|integer',
+                    'errors' => [
+                        'required' => 'Durasi harus di isi.',
+                        'integer' => 'Durasi harus berisi angka.',
+                    ]
+                ],
+                'deskripsi' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Deskripsi harus di isi.',
+                    ]
+                ],
+            ];
+
+            if ($this->validate($rules)) {
+                if ($this->paketModel->update($id, $this->request->getPost())) {
+                    session()->setFlashdata('success', 'Paket berhasil diupdate!');
+                    return redirect()->to('/super-admin/paket');
+                } else {
+                    session()->setFlashdata('error', 'Gagal mengupdate paket!');
+                }
+            } else {
+                session()->setFlashdata('error', 'Validasi gagal! Silakan periksa kembali data yang dimasukkan.');
+                session()->setFlashdata('errors', $this->validator->getErrors());
+            }
+        }
+
+        $data = [
+            'title' => 'Edit Paket',
+            'paket' => $paket,
+            'validation' => \Config\Services::validation()
+        ];
+
+        return view('super_admin/paket/edit', $data);
+    }
+
+    public function paketDelete($id)
+    {
+        $paket = $this->paketModel->find($id);
+
+        if ($paket) {
+            if ($this->paketModel->delete($id)) {
+                session()->setFlashdata('success', 'Paket berhasil dihapus!');
+            } else {
+                session()->setFlashdata('error', 'Gagal menghapus Paket!');
+            }
+        } else {
+            session()->setFlashdata('error', 'Paket tidak ditemukan!');
+        }
+
+        return redirect()->to('/super-admin/paket');
     }
 }

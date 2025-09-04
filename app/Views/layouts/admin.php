@@ -19,7 +19,7 @@
             overflow-y: auto;
             z-index: 1030;
         }
-            
+
         .sidebar .nav-link {
             color: rgba(255, 255, 255, 0.8);
             border-radius: 10px;
@@ -84,6 +84,12 @@
                                 <a class="nav-link <?= strpos(current_url(), 'super-admin/restoran') !== false ? 'active' : '' ?>"
                                     href="<?= base_url('super-admin/restoran') ?>">
                                     <i class="fas fa-store me-2"></i>Kelola Restoran
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link <?= strpos(current_url(), 'super-admin/paket') !== false ? 'active' : '' ?>"
+                                    href="<?= base_url('super-admin/paket') ?>">
+                                    <i class="fa-solid fa-star me-2"></i>Kelola Paket
                                 </a>
                             </li>
                             <li class="nav-item">
