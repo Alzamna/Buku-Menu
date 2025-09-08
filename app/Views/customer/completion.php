@@ -8,29 +8,19 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root { --coffee-green:#114b36; --coffee-green-600:#0d3a2a; --surface:#ffffff; }
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: radial-gradient(1200px 600px at 20% -10%, #e7f1eb 0%, transparent 60%),
+                        radial-gradient(1200px 600px at 120% 110%, #e7f1eb 0%, transparent 60%),
+                        #f9fbf9;
             min-height: 100vh;
             margin: 0;
             padding: 0;
         }
 
-        .completion-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
+        .completion-container { background: var(--surface); backdrop-filter: blur(10px); border-radius: 24px; margin-top: 20px; margin-bottom: 20px; box-shadow: 0 20px 40px rgba(17,75,54,.06); border: 1px solid rgba(17,75,54,.06); }
 
-        .completion-header {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            color: white;
-            border-radius: 20px 20px 0 0;
-            padding: 3rem;
-            text-align: center;
-        }
+        .completion-header { background: linear-gradient(135deg,#1a6a4c 0%,#114b36 100%); color:#fff; border-radius: 24px 24px 0 0; padding: 3rem; text-align: center; }
 
         .success-animation {
             animation: bounce 2s infinite;
@@ -79,17 +69,10 @@
             }
         }
 
-        .order-details {
-            border: 1px solid #e9ecef;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            transition: transform 0.3s ease;
-        }
-
-        .order-details:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
+        .card.shadow { border: 1px solid rgba(17,75,54,.08); border-radius: 16px; }
+        .card-header { background:#fff; border-bottom: 1px dashed rgba(17,75,54,.15); }
+        .order-details { border: 1px solid rgba(17,75,54,.08); border-radius: 14px; margin-bottom: 12px; transition: transform .25s ease, box-shadow .25s ease; background:#fff; }
+        .order-details:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(17,75,54,.08); }
 
         .status-badge {
             font-size: 0.9rem;
@@ -147,6 +130,13 @@
             background: #6c757d;
             color: white;
         }
+        .price { color: var(--coffee-green); font-weight: 700; }
+        .section-title { font-weight: 700; color:#102a26; display:flex; align-items:center; gap:10px; margin:0; }
+        .section-title i { color: var(--coffee-green); }
+        .btn-primary { background-color: var(--coffee-green); border-color: var(--coffee-green); }
+        .btn-primary:hover, .btn-primary:focus { background-color: var(--coffee-green-600); border-color: var(--coffee-green-600); }
+        .btn-outline-primary { color: var(--coffee-green); border-color: var(--coffee-green); }
+        .btn-outline-primary:hover { background-color: var(--coffee-green); border-color: var(--coffee-green); }
     </style>
 </head>
 
@@ -174,15 +164,13 @@
                     <div class="col-md-8">
                         <div class="card shadow mb-4">
                             <div class="card-header">
-                                <h6 class="m-0 font-weight-bold text-primary">
-                                    <i class="fas fa-receipt me-2"></i>Informasi Pesanan
-                                </h6>
+                                <h6 class="section-title"><i class="fas fa-receipt"></i> Informasi Pesanan</h6>
                             </div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <p><strong>Nomor Pesanan:</strong></p>
-                                        <h5 class="text-primary">#<?= $pesanan['kode_unik'] ?></h5>
+                                        <h5>#<?= $pesanan['kode_unik'] ?></h5>
                                     </div>
                                     <div class="col-md-6">
                                         <p><strong>Status:</strong></p>
@@ -212,9 +200,7 @@
                         <!-- Order Details -->
                         <div class="card shadow mb-4">
                             <div class="card-header">
-                                <h6 class="m-0 font-weight-bold text-primary">
-                                    <i class="fas fa-list me-2"></i>Detail Pesanan
-                                </h6>
+                                <h6 class="section-title"><i class="fas fa-list"></i> Detail Pesanan</h6>
                             </div>
                             <div class="card-body">
                                 <?php foreach ($detail_list as $detail): ?>
@@ -233,10 +219,7 @@
                                                 <?php endif; ?>
                                             </div>
                                             <div class="col-md-4 text-end">
-                                                <p class="text-success mb-0">
-                                                    <strong>Rp
-                                                        <?= number_format($detail['subtotal'], 0, ',', '.') ?></strong>
-                                                </p>
+                                                <p class="mb-0 price">Rp <?= number_format($detail['subtotal'], 0, ',', '.') ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -249,9 +232,7 @@
                         <!-- Payment Summary -->
                         <div class="card shadow mb-4">
                             <div class="card-header">
-                                <h6 class="m-0 font-weight-bold text-primary">
-                                    <i class="fas fa-calculator me-2"></i>Ringkasan Pembayaran
-                                </h6>
+                                <h6 class="section-title"><i class="fas fa-calculator"></i> Ringkasan Pembayaran</h6>
                             </div>
                             <div class="card-body">
                                 <div class="d-flex justify-content-between mb-2">
@@ -265,8 +246,7 @@
                                 <hr>
                                 <div class="d-flex justify-content-between mb-3">
                                     <strong>Total:</strong>
-                                    <strong class="text-success">Rp
-                                        <?= number_format($pesanan['total'] * 1.11, 0, ',', '.') ?></strong>
+                                    <strong class="price">Rp <?= number_format($pesanan['total'] * 1.11, 0, ',', '.') ?></strong>
                                 </div>
 
                                 <div class="alert alert-info">
@@ -311,11 +291,11 @@
                         $menuUrl = base_url('/');
                     }
                     ?>
-                    <a href="<?= $menuUrl ?>" class="btn btn-primary btn-lg me-3" style="border-radius: 25px; padding: 12px 30px;">
+                    <a href="<?= $menuUrl ?>" class="btn btn-primary btn-lg me-3" style="border-radius: 14px; padding: 12px 30px;">
                         <i class="fas fa-utensils me-2"></i>Kembali ke Menu
                     </a>
                     <a href="<?= base_url("customer/order/{$pesanan['kode_unik']}") ?>"
-                        class="btn btn-outline-primary btn-lg" style="border-radius: 25px; padding: 12px 30px;">
+                        class="btn btn-outline-primary btn-lg" style="border-radius: 14px; padding: 12px 30px;">
                         <i class="fas fa-eye me-2"></i>Lihat Detail
                     </a>
                 </div>

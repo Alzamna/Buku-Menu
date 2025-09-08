@@ -8,50 +8,63 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root { --coffee-green:#114b36; --coffee-green-600:#0d3a2a; --surface:#ffffff; }
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: radial-gradient(1200px 600px at 20% -10%, #e7f1eb 0%, transparent 60%),
+                        radial-gradient(1200px 600px at 120% 110%, #e7f1eb 0%, transparent 60%),
+                        #f9fbf9;
             min-height: 100vh;
         }
 
         .navbar {
             background: rgba(255, 255, 255, 0.95) !important;
             backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(17,75,54,.08);
         }
 
         .order-container {
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--surface);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
+            border-radius: 24px;
             margin-top: 20px;
             margin-bottom: 20px;
+            box-shadow: 0 20px 40px rgba(17,75,54,.06);
+            border: 1px solid rgba(17,75,54,.06);
         }
 
         .order-header {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            background: linear-gradient(135deg,#1a6a4c 0%,#114b36 100%);
             color: white;
-            border-radius: 20px 20px 0 0;
+            border-radius: 24px 24px 0 0;
             padding: 2rem;
             text-align: center;
         }
 
+        .card.shadow { border: 1px solid rgba(17,75,54,.08); border-radius: 16px; }
+        .card-header { background:#fff; border-bottom: 1px dashed rgba(17,75,54,.15); }
+        .section-title { font-weight: 700; color:#102a26; display:flex; align-items:center; gap:10px; margin:0; }
+        .section-title i { color: var(--coffee-green); }
+
         .order-item {
-            border: 1px solid #e9ecef;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            transition: transform 0.3s ease;
+            border: 1px solid rgba(17,75,54,.08);
+            border-radius: 14px;
+            margin-bottom: 12px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            background:#fff;
         }
 
-        .order-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
+        .order-item:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(17,75,54,.08); }
 
         .item-image {
-            width: 60px;
-            height: 60px;
+            width: 64px;
+            height: 64px;
             object-fit: cover;
-            border-radius: 10px;
+            border-radius: 12px;
         }
+
+        .price { color: var(--coffee-green); font-weight: 700; }
+        .btn-primary { background-color: var(--coffee-green); border-color: var(--coffee-green); }
+        .btn-primary:hover, .btn-primary:focus { background-color: var(--coffee-green-600); border-color: var(--coffee-green-600); }
 
         .success-animation {
             animation: bounce 2s infinite;
@@ -94,9 +107,7 @@
                         <!-- Order Details -->
                         <div class="card shadow mb-4">
                             <div class="card-header">
-                                <h6 class="m-0 font-weight-bold text-primary">
-                                    <i class="fas fa-info-circle me-2"></i>Detail Pesanan
-                                </h6>
+                                <h6 class="section-title"><i class="fas fa-info-circle"></i> Detail Pesanan</h6>
                             </div>
                             <div class="card-body">
                                 <div class="row">
@@ -114,7 +125,7 @@
                                                 <td><strong>Metode:</strong></td>
                                                 <td>
                                                     <?php if ($pesanan['metode'] === 'dine_in'): ?>
-                                                        <span class="badge bg-primary">Dine In</span>
+                                                        <span class="badge bg-dark">Dine In</span>
                                                     <?php else: ?>
                                                         <span class="badge bg-success">Take Away</span>
                                                     <?php endif; ?>
@@ -166,9 +177,7 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Total:</strong></td>
-                                                <td><strong class="text-success">Rp
-                                                        <?= number_format($pesanan['total'] * 1.11, 0, ',', '.') ?></strong>
-                                                </td>
+                                                <td><strong class="price">Rp <?= number_format($pesanan['total'] * 1.11, 0, ',', '.') ?></strong></td>
                                             </tr>
                                         </table>
                                     </div>
@@ -177,10 +186,8 @@
                         </div>
                         <?php if (!empty($pesanan['nama']) || !empty($pesanan['telepon'])): ?>
                             <div class="card shadow mb-4">
-                                <div class="card-header bg-light">
-                                    <h6 class="m-0 font-weight-bold text-primary">
-                                        <i class="fas fa-user me-2"></i>Informasi Pelanggan
-                                    </h6>
+                                <div class="card-header">
+                                    <h6 class="section-title"><i class="fas fa-user"></i> Informasi Pelanggan</h6>
                                 </div>
                                 <div class="card-body">
                                     <p><strong>Nama:</strong> <?= esc($pesanan['nama']) ?></p>
@@ -192,9 +199,7 @@
                         <!-- Order Items -->
                         <div class="card shadow">
                             <div class="card-header">
-                                <h6 class="m-0 font-weight-bold text-primary">
-                                    <i class="fas fa-list me-2"></i>Item Pesanan
-                                </h6>
+                                <h6 class="section-title"><i class="fas fa-list"></i> Item Pesanan</h6>
                             </div>
                             <div class="card-body">
                                 <?php foreach ($detail_list as $detail): ?>
@@ -226,10 +231,7 @@
                                             </div>
 
                                             <div class="col-md-3">
-                                                <p class="text-success mb-0">
-                                                    <strong>Rp
-                                                        <?= number_format($detail['subtotal'], 0, ',', '.') ?></strong>
-                                                </p>
+                                                <p class="mb-0 price">Rp <?= number_format($detail['subtotal'], 0, ',', '.') ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -242,9 +244,7 @@
                         <!-- Instructions -->
                         <div class="card shadow">
                             <div class="card-header">
-                                <h6 class="m-0 font-weight-bold text-primary">
-                                    <i class="fas fa-info-circle me-2"></i>Instruksi
-                                </h6>
+                                <h6 class="section-title"><i class="fas fa-info-circle"></i> Instruksi</h6>
                             </div>
                             <div class="card-body">
                                 <div class="alert alert-info">
