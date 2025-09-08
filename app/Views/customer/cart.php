@@ -76,7 +76,7 @@
             </a>
             
             <div class="navbar-nav ms-auto">
-                <a href="<?= base_url() ?>" class="btn btn-outline-primary">
+                <a href="<?= base_url('customer/menu') ?>" class="btn btn-outline-primary">
                     <i class="fas fa-home me-2"></i>Beranda
                 </a>
             </div>
@@ -98,7 +98,7 @@
                         <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
                         <h4 class="text-muted">Keranjang Belanja Kosong</h4>
                         <p class="text-muted">Belum ada item di keranjang belanja Anda</p>
-                        <a href="<?= base_url() ?>" class="btn btn-primary">
+                        <a href="<?= base_url('customer/menu') ?>" class="btn btn-primary">
                             <i class="fas fa-utensils me-2"></i>Lihat Menu
                         </a>
                     </div>
@@ -159,16 +159,7 @@
                         
                         <div class="d-flex justify-content-between align-items-center mt-4">
                             <div>
-                        <?php
-                            $restoranUuid = session('restoran_uuid');
-                            $mejaUuid = session('meja_uuid');
-
-                            $menuUrl = $restoranUuid
-                                ? base_url('customer/menu/' . $restoranUuid . ($mejaUuid ? '/' . $mejaUuid : ''))
-                                : base_url('/'); // fallback kalau session kosong
-                            ?>
-                        
-                        <a href="<?= $menuUrl ?>" class="btn btn-secondary">
+                        <a href="<?= base_url('customer/menu') ?>" class="btn btn-secondary">
                             <i class="fas fa-arrow-left me-2"></i> Lanjut Belanja
                         </a>
 
@@ -210,4 +201,4 @@
         }
     </script>
 </body>
-</html> 
+</html>
